@@ -1,0 +1,27 @@
+.sidebar {
+    position: fixed;
+}
+
+.scrollable {
+    height: 100%;
+    overflow: auto;
+}
+
+.form-group.required .control-label:after { 
+    content:"*"; 
+    color:red; 
+}
+
+.productsAjax {
+    background: whitesmoke;
+    width: 30%;
+}
+
+.productsAjax li {
+    list-style-type: none;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: -15px;
+    line-height: 25px;
+}
+
