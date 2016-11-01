@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3 class="page-header">Add Product</h3>
+<h3 class="page-header">Add Branch</h3>
 @if(Session::has('flash_message'))
     <div class="alert alert-success">
         {!! Session::get('flash_message') !!}
@@ -18,38 +18,30 @@
     </div>
 @endif
 
-<form method="POST" action="{!! route('product.index') !!}" name="frmProduct" class="form-horizontal" id="frmProduct">
+<form method="POST" action="{!! route('branch.index') !!}" name="frmBranch" class="form-horizontal" id="frmBranch">
     {!! csrf_field() !!}
-    <div class="form-group">
+    <div class="form-group required">
         <label class="col-xs-2 control-label">Name</label>
         <div class="col-xs-5">
             <input type="text" name="name" id="name" placeholder="" class="form-control input-sm" />
         </div>
     </div>
     <div class="form-group">
-        <label class="col-xs-2 control-label">Description</label>
+        <label class="col-xs-2 control-label">Address</label>
         <div class="col-xs-5">
-            <textarea name="description" id="description" placeholder="" rows="2" class="form-control input-sm"></textarea>
+            <input type="text" name="address" id="address" placeholder="" class="form-control input-sm" />
         </div>
     </div>
-    <div class="form-group">
-        <label class="col-xs-2 control-label">SKU No</label>
+    <div class="form-group required">
+        <label for="brandId" class="control-label col-xs-2">Brand</label>
         <div class="col-xs-5">
-            <input type="text" name="skuNo" id="skuNo" placeholder="" class="form-control input-sm" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-2 control-label">Quantity</label>
-        <div class="col-xs-5">
-            <input type="text" name="quantity" id="quantity" placeholder="" class="form-control input-sm" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="branchId" class="control-label col-xs-2">Branch</label>
-        <div class="col-xs-5">
-            <select class="form-control input-sm col-xs-4" id="branchId" name="branchId">
+            <select class="form-control input-sm col-xs-4" id="brandId" name="brandId">
                 <option value="">Please Choose</option>
-                <option>1</option>
+            @if (count($brands))
+                @foreach ($brands as $brand)
+                <option value="{!! $brand->id !!}">{!! $brand->name !!}</option>
+                @endforeach
+            @endif
             </select>
         </div>
     </div>
@@ -64,7 +56,7 @@
 
     <div class="form-group">
         <div class="col-xs-offset-2 col-xs-10">
-            <button type="submit" class="btn btn-primary" name="addContact">Add Product</button>
+            <button type="submit" class="btn btn-primary" name="addContact">Add Branch</button>
         </div>
     </div>
 </form>
@@ -72,7 +64,7 @@
 <script type="text/javascript">
 $(function() {
     $("[name='isActivated']").bootstrapSwitch();
-    $('#frmProduct').formValidation({
+    $('#frmBranch').formValidation({
         framework: 'bootstrap',
         icon: {
             invalid: 'glyphicon glyphicon-remove',
@@ -82,6 +74,13 @@ $(function() {
                 validators: {
                     notEmpty: {
                         message: 'Name is required'
+                    }
+                }
+            },
+            brandId: {
+                validators: {
+                    notEmpty: {
+                        message: 'Brand is required'
                     }
                 }
             }

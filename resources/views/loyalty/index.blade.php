@@ -1,7 +1,7 @@
 @extends('layouts/admin')
 
 @section('content')
-<h3 class="page-header">Product List</h3>
+<h3 class="page-header">Brand List</h3>
 
 @if(Session::has('flash_message'))
 <div class="alert alert-success">
@@ -9,7 +9,7 @@
 </div>
 @endif
 
-@if (count($products))
+@if (count($brands))
 
 <form class="form-inline pull-right" style="padding-bottom: 10px;">
     <input class="form-control input-sm" type="text" placeholder="Search">
@@ -20,39 +20,35 @@
 <table class="table table-striped table-condensed table-hover" id="tblTxnList">
     <tr>
         <th>ID</th>
+        <th>Category</th>
         <th>Name</th>
         <th>Description</th>
-        <th>Quantity</th>
-        <th>SKU No</th>
-        <th>Branch</th>
         <th width="7%" colspan="4">Actions</th>
     </tr>
-    @foreach ($products as $val)
+    @foreach ($brands as $brand)
     <tr>
-        <td>{!! $val->id !!}</td>
-        <td>{!! $val->name or ''!!}</td>
-        <td>{!! $val->description !!}</td>
-        <td>{!! $val->quantity !!}</td>
-        <td>{!! $val->sku_no !!}</td>
-        <td>{!! $val->branch_id !!}</td>
-        <td><a href="{!! route('product.show', $val->id)!!}" class="btn btn-primary btn-xs">View</a></td>
-        <td><a href="{!! route('product.edit', $val->id) !!}" class="btn btn-warning btn-xs">Edit</a></td>
+        <td>{!! $brand->id !!}</td>
+        <td>{!! $brand->category_id or ''!!}</td>
+        <td>{!! $brand->name !!}</td>
+        <td>{!! $brand->description !!}</td>
+        <td><a href="{!! route('brand.show', $brand->id)!!}" class="btn btn-primary btn-xs">View</a></td>
+        <td><a href="{!! route('brand.edit', $brand->id) !!}" class="btn btn-warning btn-xs">Edit</a></td>
         <td>
             <a href="#" class="formConfirm btn btn-danger btn-delete btn-xs"
-               data-form="#frmDelete{!! $val->id !!}" data-title="Delete Product"
-               data-message="Are you sure you want to delete this product with ID {!! $val->id !!}?">
+               data-form="#frmDelete{!! $brand->id !!}" data-title="Delete Brand"
+               data-message="Are you sure you want to delete this brand with ID {!! $brand->id !!}?">
                 Delete
             </a>
-            {!! Form::open(['method' => 'DELETE', 'route'=>['product.destroy', $val->id],
-            'id' => 'frmDelete' . $val->id]) !!}
+            {!! Form::open(['method' => 'DELETE', 'route'=>['brand.destroy', $brand->id],
+            'id' => 'frmDelete' . $brand->id]) !!}
             {!! Form::close() !!}
         </td>
     </tr>
     @endforeach
 </table>
-{!! $products->links() !!}
+{!! $brands->links() !!}
 @else
-    No Products found!
+    No Brands found!
 @endif
 
 <!-- Include the dialog view from "views/dialogbox" folder -->
