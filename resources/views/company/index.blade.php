@@ -1,7 +1,7 @@
 @extends('layouts/admin')
 
 @section('content')
-<h3 class="page-header">Brand List</h3>
+<h3 class="page-header">Company List</h3>
 
 @if(Session::has('flash_message'))
 <div class="alert alert-success">
@@ -20,26 +20,26 @@
 <table class="table table-striped table-condensed table-hover" id="tblTxnList">
     <tr>
         <th>ID</th>
-        <th>Category</th>
         <th>Name</th>
+        <th>Company Code</th>
         <th>Description</th>
         <th width="7%" colspan="4">Actions</th>
     </tr>
     @foreach ($brands as $brand)
     <tr>
         <td>{!! $brand->id !!}</td>
-        <td>{!! $brand->category_id or ''!!}</td>
         <td>{!! $brand->name !!}</td>
+        <td>{!! $brand->company_code !!}</td>
         <td>{!! $brand->description !!}</td>
-        <td><a href="{!! route('brand.show', $brand->id)!!}" class="btn btn-primary btn-xs">View</a></td>
-        <td><a href="{!! route('brand.edit', $brand->id) !!}" class="btn btn-warning btn-xs">Edit</a></td>
+        <td><a href="{!! route('company.show', $brand->id)!!}" class="btn btn-primary btn-xs">View</a></td>
+        <td><a href="{!! route('company.edit', $brand->id) !!}" class="btn btn-warning btn-xs">Edit</a></td>
         <td>
             <a href="#" class="formConfirm btn btn-danger btn-delete btn-xs"
                data-form="#frmDelete{!! $brand->id !!}" data-title="Delete Brand"
                data-message="Are you sure you want to delete this brand with ID {!! $brand->id !!}?">
                 Delete
             </a>
-            {!! Form::open(['method' => 'DELETE', 'route'=>['brand.destroy', $brand->id],
+            {!! Form::open(['method' => 'DELETE', 'route'=>['company.destroy', $brand->id],
             'id' => 'frmDelete' . $brand->id]) !!}
             {!! Form::close() !!}
         </td>
@@ -48,7 +48,7 @@
 </table>
 {!! $brands->links() !!}
 @else
-    No Brands found!
+    No Company found!
 @endif
 
 <!-- Include the dialog view from "views/dialogbox" folder -->

@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Brand;
+use App\Classes\PassSlotClass;
+use App\Classes\PassSlotApiException;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Session;
 use Auth;
 
-class BrandController extends Controller
+class CompanyController extends Controller
 {
     public function __construct()
     {
@@ -15,9 +17,9 @@ class BrandController extends Controller
 
     public function index()
     {
-        $brands = Brand::paginate(20);
+        $brands = Company::paginate(20);
 
-        return view('brand.index', compact('brands'));
+        return view('company.index', compact('brands'));
     }
 
     /**
@@ -29,24 +31,24 @@ class BrandController extends Controller
     public function show($id)
     {
         $logged_in = Auth::user();
-        $brand = Brand::leftJoin('users AS a1', 'brand.created_by', '=', 'a1.id')
-                ->leftJoin('users AS a2', 'brand.last_updated_by', '=', 'a2.id')
+        $brand = Company::leftJoin('users AS a1', 'company.created_by', '=', 'a1.id')
+                ->leftJoin('users AS a2', 'company.last_updated_by', '=', 'a2.id')
                 ->where([
-                    ['brand.id', $id],
+                    ['company.id', $id],
                 ])
-                ->first(['brand.*', 'a1.name AS created_by', 'a2.name AS updated_by']);
+                ->first(['company.*', 'a1.name AS created_by', 'a2.name AS updated_by']);
 
-        return view('brand.show', compact('brand'));
+        return view('company.show', compact('brand'));
     }
 
     /**
-     * Creates a new brand
+     * Creates a new company
      *
      * @return Response
      */
     public function create()
     {
-        return view('brand.create');
+        return view('company.create');
     }
 
     /**
@@ -61,43 +63,44 @@ class BrandController extends Controller
         //validate required fields
         $v = $this->validate($request, [
             'name' => 'required',
-            'categoryId' => 'required'
+            'templateId' => 'required',
         ]);
 
         if ($v && $v->fails()) {
             return redirect()->back()->withInput($request->all())->withErrors($v->errors());
         } else {
-            // create the data for new contact
-            $product = new Brand;
-            $product->name = $request->get('name');
-            $product->description = $request->get('description');
-            $product->category_id = $request->get('categoryId');
-            $product->is_activated = $request->get('isActivated');
-            $product->created_by = $logged_in->id;
-            $product->last_updated_by = $logged_in->id;
+            // create the data for new company
+            $brand = new Company;
+            $brand->name = $request->get('name');
+            $brand->description = $request->get('description');
+            $brand->passslot_template_id = $request->get('templateId');
+
+            $brand->is_active = $request->get('isActivated');
+            $brand->created_by = $logged_in->id;
+            $brand->last_updated_by = $logged_in->id;
 
             // save new brand
-            $product->save();
+            $brand->save();
 
-            Session::flash('flash_message', 'Brand successfully added!');
+            Session::flash('flash_message', 'Company successfully added!');
 
-            $brands = Brand::paginate(20);
+            $brands = Company::paginate(20);
 
-            return view('brand.index', compact('brands'));
+            return view('company.index', compact('brands'));
         }
     }
 
     public function edit($id) {
-        $brand = Brand::leftJoin('users AS a1', 'brand.created_by', '=', 'a1.id')
-                ->leftJoin('users AS a2', 'brand.last_updated_by', '=', 'a2.id')
+        $brand = Company::leftJoin('users AS a1', 'company.created_by', '=', 'a1.id')
+                ->leftJoin('users AS a2', 'company.last_updated_by', '=', 'a2.id')
                 ->where([
-                    ['brand.id', $id],
-                    ['brand.deleted_at', NULL],
-                    ['a1.is_active', 'Y']
+                    ['company.id', $id],
+                    ['company.deleted_at', NULL],
+                    ['company.is_active', 'Y']
                 ])
-                ->first(['brand.*', 'a1.name AS created_by', 'a2.name AS updated_by']);
+                ->first(['company.*', 'a1.name AS created_by', 'a2.name AS updated_by']);
 
-        return view('brand.edit', compact('brand'));
+        return view('company.edit', compact('brand'));
     }
 
     /**
@@ -107,7 +110,7 @@ class BrandController extends Controller
      */
     public function update(Request $request, $id) {
         // update existing branch
-        $brand = Brand::find($id);
+        $brand = Company::find($id);
 
         $v = $this->validate($request, [
             'name' => 'required',
@@ -120,16 +123,15 @@ class BrandController extends Controller
 
             $brand->name = $request->get('name');
             $brand->description = $request->get('description');
-            $brand->category_id = $request->get('categoryId');
-            $brand->is_activated = $request->get('isActivated') != 'Y' ? 'N' : 'Y';
+            $brand->is_active = $request->get('isActivated') != 'Y' ? 'N' : 'Y';
             $brand->last_updated_by = $logged_in->id;
 
             // save new meta
             $brand->save();
 
-            Session::flash('flash_message', "Brand with ID $id successfully updated!");
+            Session::flash('flash_message', "Company with ID $id successfully updated!");
 
-            return redirect()->route('brand.index');
+            return redirect()->route('company.index');
         }
     }
 
@@ -141,7 +143,7 @@ class BrandController extends Controller
     public function destroy($id)
     {
         $logged_in = Auth::user();
-        $brand = Brand::findOrFail($id);
+        $brand = Company::findOrFail($id);
 
         //update last_updated_by before deleting
         $brand->last_updated_by = $logged_in->id;
@@ -151,6 +153,77 @@ class BrandController extends Controller
 
         Session::flash('flash_message', "Brand with ID $id successfully deleted!");
 
-        return redirect()->route('brand.index');
+        return redirect()->route('company.index');
+    }
+
+    public function createPassSlotTemplate()
+    {
+        $loggedIn = Auth::user();
+
+        return view('company.passslot-template', compact('loggedIn'));
+    }
+
+    public function savePassSlotTemplate(Request $request)
+    {
+        $loggedIn = Auth::user();
+        $v = $this->validate($request, [
+            'companyId' => 'required',
+            'name' => 'required',
+        ]);
+
+        if ($v && $v->fails()) {
+            return redirect()->back()->withInput($request->all())->withErrors($v->errors());
+        } else {
+            $appKey = env('PASSSLOT_KEY');
+
+            try {
+                $engine = PassSlotClass::start($appKey);
+                $data = array("name"=> $request->get('name'),
+                    "passType"=> "pass.slot.storecard",
+                    "description"=> array(
+                        "logoText"=> $request->get('logoText'),
+                        "foregroundColor"=> $request->get('foregroundColor'),
+                        "backgroundColor"=> $request->get('backgroundColor'),
+                        "storeCard" => array(
+                            "primaryFields"=> array(
+                                array(
+                                    "key"=> "points",
+                                    "label"=> "points",
+                                    "value"=> "$(memberPoints)"
+                                )
+                            ),
+                            "auxiliaryFields"=> array(
+                                array(
+                                    "key"=> "companyId",
+                                    "label"=> "Company ID",
+                                    "value"=> $request->get('companyId')
+                                )
+                            )
+                        )
+                    )
+                );
+
+                $response = $engine->createTemplate('POST', $data);
+                $responseArr = json_decode($response);
+
+                if (isset($responseArr['id'])) {
+                    $company = Company::findOrFail($request->get('companyId'));
+
+                    $company->passslot_template_id = $responseArr['id'];
+                    $company->last_updated_by = $loggedIn->id;
+                    $company->save();
+
+                    Session::flash('flash_message', "PassSlot Template was created successfully.");
+                } else {
+                    Session::flash('error_message', "Error saving template. Please try again!");
+                }
+            } catch (PassSlotApiException $e) {
+                Session::flash('error_message', "Error saving template. Please try again!");
+                return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
+            }
+
+            return $this->createPassSlotTemplate();
+        }
+
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminAuth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\Request;
 
 class PasswordController extends Controller {
     /*
@@ -40,8 +41,8 @@ class PasswordController extends Controller {
             return view($this->linkRequestView);
         }
 
-        if (view()->exists('admin.auth.passwords.email')) {
-            return view('admin.auth.passwords.email');
+        if (view()->exists('admin.passwords.email')) {
+            return view('admin.passwords.email');
         }
 
         return view('admin.passwords');
@@ -58,8 +59,8 @@ class PasswordController extends Controller {
             return view($this->resetView)->with(compact('token', 'email'));
         }
 
-        if (view()->exists('admin.auth.passwords.reset')) {
-            return view('admin.auth.passwords.reset')->with(compact('token', 'email'));
+        if (view()->exists('admin.passwords.reset')) {
+            return view('admin.passwords.reset')->with(compact('token', 'email'));
         }
 
         return view('admin.passwords.reset')->with(compact('token', 'email'));

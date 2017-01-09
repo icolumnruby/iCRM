@@ -17,9 +17,10 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('is_active', ['Y', 'N'])->default('Y');
+            $table->enum('is_active', ['Y', 'N'])->default('N');
             $table->integer('type');
             $table->integer('company_id');
+            $table->integer('branch_id');
             $table->rememberToken();
 
             $table->bigInteger('created_by');

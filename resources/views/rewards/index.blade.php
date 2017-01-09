@@ -1,7 +1,7 @@
 @extends('layouts/admin')
 
 @section('content')
-<h3 class="page-header">Brand List</h3>
+<h3 class="page-header">Rewards List</h3>
 
 @if(Session::has('flash_message'))
 <div class="alert alert-success">
@@ -9,53 +9,64 @@
 </div>
 @endif
 
-@if (count($brands))
+@if (count($rewards))
 
 <form class="form-inline pull-right" style="padding-bottom: 10px;">
     <input class="form-control input-sm" type="text" placeholder="Search">
     <button class="btn btn-success-outline btn-sm" type="submit">Search</button>
+    <a href="{{route('rewards.create')}}" class="btn btn-success btn-sm">Create New</a>
     <div class="clearfix"></div>
 </form>
 
-<table class="table table-striped table-condensed table-hover" id="tblTxnList">
+<table class="table table-striped table-condensed table-hover" id="tblRewardsList">
     <tr>
         <th>ID</th>
-        <th>Category</th>
         <th>Name</th>
-        <th>Description</th>
+        <th>Quantity</th>
+        <th>Points</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Daily Limit</th>
+        <th>Monthly Limit</th>
+        <th>Member Limit</th>
         <th width="7%" colspan="4">Actions</th>
     </tr>
-    @foreach ($brands as $brand)
+    @foreach ($rewards as $val)
     <tr>
-        <td>{!! $brand->id !!}</td>
-        <td>{!! $brand->category_id or ''!!}</td>
-        <td>{!! $brand->name !!}</td>
-        <td>{!! $brand->description !!}</td>
-        <td><a href="{!! route('brand.show', $brand->id)!!}" class="btn btn-primary btn-xs">View</a></td>
-        <td><a href="{!! route('brand.edit', $brand->id) !!}" class="btn btn-warning btn-xs">Edit</a></td>
+        <td>{!! $val->id !!}</td>
+        <td>{!! $val->name !!}</td>
+        <td>{!! $val->quantity !!}</td>
+        <td>{!! $val->points !!}</td>
+        <td>{!! $val->start_date != '0000-00-00 00:00:00' ? date_format(new DateTime($val->start_date), 'Y-m-d H:i:s') : '' !!}</td>
+        <td>{!! $val->end_date != '0000-00-00 00:00:00' ? date_format(new DateTime($val->end_date), 'Y-m-d H:i:s') : '' !!}</td>
+        <td>{!! $val->daily_limit !!}</td>
+        <td>{!! $val->monthly_limit !!}</td>
+        <td>{!! $val->member_limit !!}</td>
+        <td><a href="{!! route('rewards.show', $val->id)!!}" class="btn btn-primary btn-xs">View</a></td>
+        <td><a href="{!! route('rewards.edit', $val->id) !!}" class="btn btn-warning btn-xs">Edit</a></td>
         <td>
             <a href="#" class="formConfirm btn btn-danger btn-delete btn-xs"
-               data-form="#frmDelete{!! $brand->id !!}" data-title="Delete Brand"
-               data-message="Are you sure you want to delete this brand with ID {!! $brand->id !!}?">
+               data-form="#frmDelete{!! $val->id !!}" data-title="Delete Brand"
+               data-message="Are you sure you want to delete this brand with ID {!! $val->id !!}?">
                 Delete
             </a>
-            {!! Form::open(['method' => 'DELETE', 'route'=>['brand.destroy', $brand->id],
-            'id' => 'frmDelete' . $brand->id]) !!}
+            {!! Form::open(['method' => 'DELETE', 'route'=>['rewards.destroy', $val->id],
+            'id' => 'frmDelete' . $val->id]) !!}
             {!! Form::close() !!}
         </td>
     </tr>
     @endforeach
 </table>
-{!! $brands->links() !!}
+{!! $rewards->links() !!}
 @else
-    No Brands found!
+    No Rewards found!
 @endif
 
 <!-- Include the dialog view from "views/dialogbox" folder -->
 @include('dialogbox.delete_confirm')
 <script type="text/javascript">
     $(function () {
-        $('#tblTxnList').on('click', '#btnDelete', function (e) {
+        $('#tblRewardsList').on('click', '#btnDelete', function (e) {
             e.preventDefault();
         });
     });

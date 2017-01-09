@@ -6,26 +6,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <title>Retailers CRM - Client Admin</title>
+        <title>iColumn CRM - Admin</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="{{ URL::asset('css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ URL::asset('css/bootstrap-switch.min.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('css/bootstrap-social.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
 
         <link rel="stylesheet" href="{{ URL::asset('css/formValidation.min.css') }}">
 
         <!-- MetisMenu CSS -->
         <link href="{{ URL::asset('css/metisMenu.min.css') }}" rel="stylesheet">
 
-        <!-- Social Buttons CSS -->
-        <link href="{{ URL::asset('css/bootstrap-social.css') }}" rel="stylesheet">
-
         <!-- Custom CSS -->
         <link href="{{ URL::asset('css/sb-admin-2.css') }}" rel="stylesheet">
 
         <!-- Custom Fonts -->
         <link href="{{ URL::asset('css/font-awesome.min.css') }}" rel="stylesheet">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
 
         <link href="{{ URL::asset('css/custom.css') }}" rel="stylesheet">
 
@@ -53,7 +55,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html">Retailers CRM - Client Admin</a>
+                    <a class="navbar-brand" href="index.html">iColumn CRM</a>
                 </div>
                 <!-- /.navbar-header -->
 
@@ -78,7 +80,6 @@
                 </ul>
                 <!-- /.navbar-top-links -->
 
-
             </nav>
             <div class="navbar-default navbar-fixed-top sidebar scrollable" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
@@ -97,30 +98,36 @@
                         <li>
                             <a href="/admin"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
+                        @role('administrator')
                         <li>
-                            <a href="/contact"><i class="fa fa-users fa-fw"></i> Contacts<span class="fa arrow"></span></a>
+                            <a href="/contact"><i class="fa fa-sitemap fa-fw"></i> Company<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="/contact/create">Create</a>
-                                </li>
-                                <li>
-                                    <a href="/contact">View</a>
-                                </li>
-                                <li>
-                                    <a href="/contact/import">Import</a>
-                                </li>
-                                <li>
-                                    <a href="/contact/export">Export</a>
-                                </li>
-                                <li>
-                                    <a href="/meta">View Custom Fields</a>
-                                </li>
-                                <li>
-                                    <a href="/meta/create">Create Custom Fields</a>
-                                </li>
-                                <li>
-                                    <a href="#">Segments</a>
-                                </li>
+                                <li><a href="/company/create">Create</a></li>
+                                <li><a href="/company">View</a></li>
+                            </ul>
+                        </li>
+                        @endrole
+                        @role('administrator|manager')
+                        <li>
+                            <a href="/contact"><i class="fa fa-sitemap fa-fw"></i> Branch<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                @role('administrator')
+                                <li><a href="/branch/create">Create</a></li>
+                                <li><a href="/branch">View</a></li>
+                                @endrole
+                                <li><a href="/branch/show-users/{{ Auth::user()->company_id }}">View Users</a></li>
+                                <li><a href="/branch/add-manager">Add Manager</a></li>
+                                <li><a href="/branch/add-staff">Add Staff</a></li>
+                            </ul>
+                        </li>
+                        @endrole
+                        @role('administrator|manager|staff')
+                        <li>
+                            <a href="/member"><i class="fa fa-users fa-fw"></i> Members<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a href="/member/create">Create</a></li>
+                                <li><a href="/member">View</a></li>
+                                <li><a href="/member/export">Export</a></li>
                             </ul>
                         </li>
                         <li>
@@ -132,50 +139,49 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> Products<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-tags fa-fw"></i> Loyalty Points Program<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/product/create">Create</a>
+                                    <a href="/loyalty/">List</a>
                                 </li>
                                 <li>
-                                    <a href="/product">View</a>
+                                    <a href="/loyalty/create">Add Settings</a>
+                                </li>
+                                <li>
+                                    <a href="/member/points-log">Points Logs</a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-qrcode fa-fw"></i> Brand<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-money fa-fw"></i> GWP<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/brand/create">Create</a>
+                                    <a href="">Campaigns</a>
                                 </li>
-                                <li>
-                                    <a href="/brand">View</a>
-                                </li>
+
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Branch<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-cogs fa-fw"></i> Configurations<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/branch/create">Create</a>
+                                    <a href="/product/category/">Product Category List</a>
                                 </li>
                                 <li>
-                                    <a href="/branch">View</a>
+                                    <a href="/product/category/create">Create Product Category</a>
+                                </li>
+                                <li>
+                                    <a href="/rewards/">Rewards List</a>
+                                </li>
+                                <li>
+                                    <a href="/rewards/create">Add Rewards</a>
+                                </li>
+                                <li>
+                                    <a href="/rewards/create">Create PassSlot Template</a>
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#"><i class="fa fa-calendar fa-fw"></i> Appointment</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-list-alt fa-fw"></i> Campaigns</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> GVMS</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Analytics</a>
-                        </li>
+                        @endrole
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
@@ -191,12 +197,12 @@
         </div>
         <!-- /#wrapper -->
 
-
         <!-- Bootstrap Core JavaScript -->
-        <script src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
-        <script src="{{ URL::asset('js/bootstrap-switch.min.js') }}"></script>
+        <script type="text/javascript" src="{{ URL::asset('js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ URL::asset('js/bootstrap-switch.min.js') }}"></script>
         <script type="text/javascript" src="{{ URL::asset('js/formValidation.min.js') }}"></script>
         <script type="text/javascript" src="{{ URL::asset('js/formValidation.bootstrap.js') }}"></script>
+        <script type="text/javascript" src="{{ URL::asset('js/bootstrap-datetimepicker.min.js') }}"></script>
 
         <!-- Metis Menu Plugin JavaScript -->
         <script src="{{ URL::asset('js/sb-admin-2/metisMenu.min.js') }}"></script>

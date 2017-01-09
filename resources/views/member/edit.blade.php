@@ -5,8 +5,8 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-@if (count($contact))
-            <h2 class="page-header">Update Contact</h2>
+@if (count($member))
+            <h2 class="page-header">Update Member</h2>
 @if(Session::has('flash_message'))
 <div class="alert alert-success">
     {{ Session::get('flash_message') }}
@@ -22,64 +22,91 @@
 </div>
 @endif
 
-{!! Form::model($contact,['method' => 'PATCH','route'=>['contact.update',$contact->id], 'class'=>'form-horizontal', 'id'=>'frmContactUpdate']) !!}
+{!! Form::model($member,['method' => 'PATCH','route'=>['member.update',$member->id], 'class'=>'form-horizontal', 'id'=>'frmMemberUpdate']) !!}
     {{ csrf_field() }}
     <div class="form-group form-inline">
         <label for="salutation" class="col-xs-2 control-label">Salutation</label>
-        <div class="col-xs-5">
-            @foreach (App\Models\Contact::$_salutation as $key => $val)
+        <div class="col-xs-4">
+            @foreach (App\Models\Member::$_salutation as $key => $val)
             <label class="radio-inline">
-                <input type="radio" name="salutation" id="salutation1" value="{{$key}}" {{ ($contact->salutation == $key)? 'checked="checked"' : '' }}> {{$val}}
+                <input type="radio" name="salutation" id="salutation1" value="{{$key}}" {{ ($member->salutation == $key)? 'checked="checked"' : '' }}> {{$val}}
             </label>
             @endforeach
         </div>
     </div>
     <div class="form-group required">
         <label for="firstname" class="control-label col-xs-2">First Name</label>
-        <div class="col-xs-5">
-            <input type="text" name="firstname" id="firstname" placeholder="i.e. John" class="form-control input-sm" value="{{ ucfirst($contact->firstname) }}" />
+        <div class="col-xs-4">
+            <input type="text" name="firstname" id="firstname" placeholder="i.e. John" class="form-control input-sm" value="{{ ucfirst($member->firstname) }}" />
         </div>
     </div>
     <div class="form-group">
         <label for="middlename" class="col-xs-2 control-label">Middle Name</label>
-        <div class="col-xs-5">
-            <input type="text" name="middlename" id="middlename" placeholder="i.e. Smith" class="form-control input-sm" value="{{ ucfirst($contact->middlename) }}" />
+        <div class="col-xs-4">
+            <input type="text" name="middlename" id="middlename" placeholder="i.e. Smith" class="form-control input-sm" value="{{ ucfirst($member->middlename) }}" />
         </div>
     </div>
     <div class="form-group required">
         <label for="lastname" class="col-xs-2 control-label">Last Name</label>
-        <div class="col-xs-5">
-            <input type="text" name="lastname" id="lastname" placeholder="i.e. Doe" class="form-control input-sm" value="{{ ucfirst($contact->lastname) }}" />
+        <div class="col-xs-4">
+            <input type="text" name="lastname" id="lastname" placeholder="i.e. Doe" class="form-control input-sm" value="{{ ucfirst($member->lastname) }}" />
         </div>
     </div>
     <div class="form-group required">
         <label for="gender" class="col-xs-2 control-label">Gender</label>
-        <div class="col-xs-5">
-            @foreach (App\Models\Contact::$_gender as $key => $val)
+        <div class="col-xs-4">
+            @foreach (App\Models\Member::$_gender as $key => $val)
             <label class="radio-inline">
-                <input type="radio" name="gender" id="gender1" value="{{$key}}" {{ ($contact->gender == $key)? 'checked="checked"' : '' }}> {{$val}}
+                <input type="radio" name="gender" id="gender1" value="{{$key}}" {{ ($member->gender == $key)? 'checked="checked"' : '' }}> {{$val}}
             </label>
             @endforeach
         </div>
     </div>
     <div class="form-group required">
         <label for="email" class="col-xs-2 control-label">Email</label>
-        <div class="col-xs-5">
-            <input type="text" name="email" id="email" placeholder="i.e. johndoe@test.com" class="form-control input-sm" value="{{ $contact->email }}" />
+        <div class="col-xs-4">
+            <input type="text" name="email" id="email" placeholder="i.e. johndoe@test.com"
+                   class="form-control input-sm" value="{!! $member->email !!}"
+                   pattern="^.+\@.+\..+$"
+                   data-fv-regexp-message="Please enter a valid email address" required/>
+            <label>
+                <input type="checkbox" name="emailSubscribe" id="emailSubscribe" value="Y"
+                       {!! ($member->email_subscribe == 'Y')? 'checked="checked"' : '' !!}> Subscribe thru Email
+            </label>
+        </div>
+    </div>
+    <div class="form-group required">
+        <label for="mobile" class="col-xs-2 control-label">Mobile</label>
+        <div class="col-xs-4">
+            <div class="row">
+                <div class="col-xs-3">
+                    @include('countryCodes', ['selected' => old('mobileCountryCode') ])
+                    <input type="hidden" name="mobileCountryCode" id="mobileCountryCode" value="{!! $member->mobile_country_code !!}" />
+                </div>
+                <div class="col-xs-4" style="padding-left: 0px">
+                    <input type="text" name="mobile" id="mobile" placeholder="i.e. 91234567"
+                           class="form-control input-sm" value="{!! $member->mobile !!}"
+                            data-fv-notempty-message="Mobile is required" required/>
+                </div>
+            </div>
+            <label class="row col-xs-6">
+                <input type="checkbox" name="smsSubscribe" id="smsSubscribe" value="Y"
+                       {!! ( $member->sms_subscribe == 'Y')? 'checked="checked"' : '' !!}> Subscribe thru SMS
+            </label>
         </div>
     </div>
     <div class="form-group required">
         <label for="nric" class="col-xs-2 control-label">NRIC/Passport</label>
-        <div class="col-xs-5">
-            <input type="text" name="nric" id="nric" placeholder="i.e. S1234567F" class="form-control input-sm" value="{{ $contact->nric }}" />
+        <div class="col-xs-4">
+            <input type="text" name="nric" id="nric" placeholder="i.e. S1234567F" class="form-control input-sm" value="{{ $member->nric }}" />
         </div>
     </div>
     <div class="form-group form-inline required">
         <label for="birthdate" class="col-xs-2 control-label">Date of Birth</label>
         <div class="col-xs-9">
             {{--*/ $dob = [] /*--}}
-            @if ($contact->birthdate)
-                {{--*/ $dob = explode('-', $contact->birthdate)  /*--}}
+            @if ($member->birthdate)
+                {{--*/ $dob = explode('-', $member->birthdate)  /*--}}
             @endif
             <select class="form-control input-sm col-xs-4" id="dobYear" name="dobYear" style="margin-right: 5px">
                 <option value="0000">Year</option>
@@ -109,19 +136,7 @@
                 @endfor
             </select>
             <div class="clearfix"></div>
-            <input type="hidden" name="birthdate" id="birthdate" value="{{ $contact->birthdate }}" />
-        </div>
-    </div>
-    <div class="form-group required">
-        <label for="mobile" class="col-xs-2 control-label">Mobile</label>
-        <div class="row">
-            <div class="col-xs-2">
-                @include('countryCodes', ['selected' => $contact->mobileCountryCode])
-                <input type="hidden" name="mobileCountryCode" id="mobileCountryCode" value="{{$contact->mobileCountryCode}}" />
-            </div>
-            <div class="col-xs-2" style="padding-left: 0px">
-                <input type="text" name="mobile" id="mobile" placeholder="90051119" class="form-control input-sm" value="{{ $contact->mobile }}" />
-            </div>
+            <input type="hidden" name="birthdate" id="birthdate" value="{{ $member->birthdate }}" />
         </div>
     </div>
     <div class="form-group">
@@ -131,7 +146,7 @@
                 <option value="">Please Choose</option>
             @if (count($countries))
                 @foreach ($countries as $val)
-                <option value="{{$val->id}}" {{ ($contact->countryId == $val->id ? 'selected="selected"': '') }}>{{$val->country}}</option>
+                <option value="{{$val->id}}" {{ ($member->country_id == $val->id ? 'selected="selected"': '') }}>{{$val->name}}</option>
                 @endforeach
             @endif
             </select>
@@ -139,20 +154,20 @@
     </div>
     <div class="form-group">
         <label for="state" class="col-xs-2 control-label">State/Province</label>
-        <div class="col-xs-5">
+        <div class="col-xs-4">
             <input type="text" name="state" id="state" placeholder="i.e. California" class="form-control input-sm" />
         </div>
     </div>
     <div class="form-group">
         <label for="city" class="col-xs-2 control-label">City</label>
-        <div class="col-xs-5">
-            <input type="text" name="city" id="city" placeholder="i.e. Los Angeles" class="form-control input-sm" value="{{ $contact->city }}" />
+        <div class="col-xs-4">
+            <input type="text" name="city" id="city" placeholder="i.e. Los Angeles" class="form-control input-sm" value="{{ $member->city }}" />
         </div>
     </div>
     <div class="form-group">
         <label for="postalCode" class="col-xs-2 control-label">Postal Code</label>
-        <div class="col-xs-5">
-            <input type="text" name="postalCode" id="postalCode" placeholder="i.e. 445701" class="form-control input-sm" value="{{ $contact->postalCode }}" />
+        <div class="col-xs-4">
+            <input type="text" name="postalCode" id="postalCode" placeholder="i.e. 445701" class="form-control input-sm" value="{{ $member->postalCode }}" />
         </div>
     </div>
     <div class="form-group">
@@ -162,121 +177,45 @@
                 <option value="">Please Choose</option>
             @if (count($nationalities))
                 @foreach ($nationalities as $val)
-                <option value="{{$val->id}}" {{ ($contact->nationalityId == $val->id ? 'selected="selected"': '') }}>{{$val->nationality}}</option>
+                <option value="{{$val->id}}" {{ ($member->nationality_id == $val->id ? 'selected="selected"': '') }}>{{$val->nationality}}</option>
                 @endforeach
             @endif
             </select>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group required">
         <label for="memberType" class="col-xs-2 control-label">Member Type</label>
         <div class="col-xs-4">
-            <select class="form-control input-sm col-xs-4" id="memberType" name="memberType">
+            <select class="form-control input-sm col-xs-4" id="memberTypeId" name="memberTypeId">
                 <option value="">Please Choose</option>
-        @foreach (App\Models\Contact::$_memberType as $key => $val)
-                <option value="{{$key}}" {{ ($contact->member_type == $key ? 'selected="selected"': '') }}>{{$val}}</option>
+        @foreach (App\Models\Member::$_memberType as $key => $val)
+                <option value="{{$key}}" {{ ($member->member_type_id == $key ? 'selected="selected"': '') }}>{{$val}}</option>
         @endforeach
             </select>
         </div>
     </div>
     <hr />
-    @if (count($contactMeta))
-        @foreach ($contactMeta as $val)
-    <div class="form-group {{ $val->is_mandatory == 'Y' ? 'required' : '' }}">
-        <label for="{{ 'lbl' . $val->meta_id }}" class="col-xs-2 control-label">{{ $val->name or '' }}</label>
-        <div class="col-xs-5">
-            @if ($val->type == 1) <!-- textbox -->
-
-            <input type="text" name="meta[{{ $val->meta_id }}]" id="{{ 'meta-' . $val->meta_id }}"
-                   placeholder="{{$val->summary}}" class="form-control input-sm" value="{{ $val->cmv_value }}" />
-
-            @elseif ($val->type == 2) <!-- textarea -->
-
-            <textarea name="meta[{{ $val->meta_id }}]" id="{{ 'meta-' . $val->meta_id }}" class="form-control" rows="3">{{ $val->cmv_value }}</textarea>
-
-            @elseif ($val->type == 3) <!-- dropdown -->
-
-                @if (count($val->options))
-                    {{--*/ $options = explode('|', $val->options) /*--}}
-                    {{--*/ $multiple = $val->multiselect ? 'multiple size=5' : '' /*--}}
-                    {{--*/ $optionVal = explode('|', $val->cmv_value) /*--}}
-            <select class="form-control input-sm col-xs-4" name="meta[{{ $val->meta_id }}][]" id="{{ 'meta-' . $val->meta_id }}" {{ $multiple }}>
-                @if (!$val->multiselect)
-                <option value="">Please Choose</option>
-                @endif
-                @foreach ($options as $value)
-                <option {{ in_array($value, $optionVal) ? 'selected="selected"' : '' }}>{{ $value }}</option>
-                @endforeach
-            </select>
-                @endif
-
-            @elseif ($val->type == 4) <!-- radio button -->
-
-                @if (count($val->options))
-                    {{--*/ $options = explode('|', $val->options) /*--}}
-
-                    @foreach ($options as $value)
-            <label class="radio-inline">
-                <input type="radio" name="meta[{{ $val->meta_id }}]" id="{{ 'meta-' . $val->meta_id }}" value="{{$value}}" {{ $val->cmv_value == $value ? 'checked="checked"' : '' }}> {{$value}}
-            </label>
-                    @endforeach
-                @endif
-
-            @elseif ($val->type == 5) <!-- chechkbox -->
-
-                @if (count($val->options))
-                    {{--*/ $options = explode('|', $val->options) /*--}}
-                    {{--*/ $optionVal = explode('|', $val->cmv_value) /*--}}
-                    @foreach ($options as $value)
-            <label class="radio-inline">
-                <input type="checkbox" name="meta[{{ $val->meta_id }}][]" id="{{ 'meta-' . $val->meta_id }}" value="{{$value}}" {{ in_array($value, $optionVal) ? 'checked="checked"' : '' }}> {{$value}}
-            </label>
-                    @endforeach
-                @endif
-
-            @elseif ($val->type == 6) <!-- date -->
-
-            <input type="text" name="meta[{{ $val->meta_id }}]" id="{{ 'meta-' . $val->meta_id }}"
-                   placeholder="{{$val->summary}}" class="form-control input-sm" value="{{ $val->cmv_value }}"
-                   data-format="{{ $val->date_format }}"/>
-
-            @elseif ($val->type == 7) <!-- email -->
-
-            <input type="text" name="meta[{{ $val->id }}]" id="{{ 'meta-' . $val->id }}"
-                   placeholder="{{$val->summary}}" class="form-control input-sm" value="{{ $val->cmv_value }}"
-                   pattern="/^.+\@.+\..+$/i" />
-
-            @elseif ($val->type == 8) <!-- number -->
-
-            <input type="number" name="meta[{{ $val->meta_id }}]" id="{{ 'meta-' . $val->meta_id }}"
-                   placeholder="{{$val->summary}}" class="form-control input-sm" value="{{ $val->cmv_value }}" />
-            @endif
-        </div>
-    </div>
-        @endforeach
-    @endif
-
     <div class="form-group">
         <div class="col-xs-offset-2 col-xs-10">
             {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
-            <a class="btn btn-link" href="{{route('contact.index')}}">Cancel</a>
+            <a class="btn btn-link" href="{{route('member.index')}}">Cancel</a>
         </div>
     </div>
 
 {!! Form::close() !!}
     <div class="col-xs-7" style="padding: 20px 0">
         <div class="pull-left">
-            Created: {{ date("F j, Y, g:i a", strtotime($contact->created_at)) }} <br />
-            Created by: {{ $contact->created_by }}
+            Created: {{ date("F j, Y, g:i a", strtotime($member->created_at)) }} <br />
+            Created by: {{ $member->created_by }}
         </div>
         <div class="pull-right">
-            Updated: {{ date("F j, Y, g:i a", strtotime($contact->updated_at)) }} <br />
-            Last updated by: {{ $contact->updated_by }}
+            Updated: {{ date("F j, Y, g:i a", strtotime($member->updated_at)) }} <br />
+            Last updated by: {{ $member->updated_by }}
         </div>
         <div class="clearfix"></div>
     </div>
 @else
-    Contact doesn't exist!
+    Member doesn't exist!
 @endif
 </div>
 </div>
@@ -285,7 +224,7 @@
 $(function() {
 
     $("[name='isMember']").bootstrapSwitch();
-    $('#frmContactUpdate').formValidation({
+    $('#frmMemberUpdate').formValidation({
         framework: 'bootstrap',
         icon: {
             invalid: 'glyphicon glyphicon-remove'
@@ -339,6 +278,13 @@ $(function() {
                 validators: {
                     notEmpty: {
                         message: 'The date is required'
+                    }
+                }
+            },
+            memberTypeId: {
+                validators: {
+                    notEmpty: {
+                        message: 'Member type is required'
                     }
                 }
             }

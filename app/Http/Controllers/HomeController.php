@@ -4,19 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Mail;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Show the application dashboard.
      *
@@ -24,6 +15,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('welcome');
+    }
+
+    public function sendMail()
+    {
+        $user = ['name' => 'Ruby', 'email' => 'bhinxy18@yahoo.com'];
+        Mail::send('admin.emails.notify-admin', ['user' => $user], function ($m) use ($user) {
+            $m->from('ruby@icolumn.com', 'Your Application');
+
+            $m->to($user['email'], $user['name'])->subject('Your Reminder!');
+        });
     }
 }

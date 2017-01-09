@@ -36,4 +36,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         'password', 'remember_token',
     ];
 
+    public static $_type = [
+        1 => 'administrator',
+        2 => 'manager',
+        3 => 'staff'
+    ];
+
 }

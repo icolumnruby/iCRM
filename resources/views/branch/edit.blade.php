@@ -45,19 +45,6 @@
             <input type="text" name="address" id="address" placeholder="" class="form-control input-sm" value="{!! $branch->address !!}" />
         </div>
     </div>
-    <div class="form-group">
-        <label for="brandId" class="control-label col-xs-2">Brand</label>
-        <div class="col-xs-5">
-            <select class="form-control input-sm col-xs-4" id="brandId" name="brandId">
-                <option value="">Please Choose</option>
-        @if (count($brands))
-            @foreach ($brands as $brand)
-            <option value="{!! $brand->id !!}" {!! $brand->id == $branch->brand_id ? 'selected="selected"' : '' !!}>{!! $brand->name !!}</option>
-            @endforeach
-        @endif
-            </select>
-        </div>
-    </div>
     <div class="form-group form-inline">
         <label for="isActivated" class="col-xs-2 control-label">Activated</label>
         <div class="checkbox col-xs-2">
@@ -111,7 +98,7 @@ $(function () {
             brandId: {
                 validators: {
                     notEmpty: {
-                        message: 'Brand is required'
+                        message: 'Branch is required'
                     }
                 }
             }

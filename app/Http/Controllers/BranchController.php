@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Brand;
+use App\Models\Company;
 use App\Models\Branch;
-use Kodeine\Acl\Models\Eloquent\Role;
-use Kodeine\Acl\Models\Eloquent\Permission;
+use App\Models\User;
+use App\Models\RoleUser;
 use Session;
 use Auth;
+use Validator;
 use Illuminate\Http\Request;
 
 class BranchController extends Controller
@@ -19,18 +20,16 @@ class BranchController extends Controller
 
     public function index()
     {
-$user = \App\Models\User::find(1);
+        $user = Auth::user();
 
-dd($user->getRoles());
-
-
-        $branch = Branch::with('brand')
+        $branches = Branch::with('company')
             ->where([
-                    ['branch.deleted_at', NULL]
+                    ['branch.deleted_at', NULL],
+                    ['branch.company_id', $user->company_id]
                 ])
             ->paginate(20);
 
-        return view('branch.index', compact('branch'));
+        return view('branch.index', compact('branches'));
     }
 
     /**
@@ -41,7 +40,6 @@ dd($user->getRoles());
      */
     public function show($id)
     {
-        $logged_in = Auth::user();
         $branch = Branch::leftJoin('users AS a1', 'branch.created_by', '=', 'a1.id')
                 ->leftJoin('users AS a2', 'branch.last_updated_by', '=', 'a2.id')
                 ->where([
@@ -60,9 +58,9 @@ dd($user->getRoles());
      */
     public function create()
     {
-        $brands = Brand::all();
+        $user = Auth::user();
 
-        return view('branch.create', compact('brands'));
+        return view('branch.create', compact('user'));
     }
 
     /**
@@ -77,27 +75,33 @@ dd($user->getRoles());
         //validate required fields
         $v = $this->validate($request, [
             'name' => 'required',
-            'brandId' => 'required',
+            'company_id' => 'required',
         ]);
 
         if ($v && $v->fails()) {
             return redirect()->back()->withInput($request->all())->withErrors($v->errors());
         } else {
-            // create the data for new contact
+            // create the data for new member
             $branch = new Branch;
             $branch->name = $request->get('name');
             $branch->address = $request->get('address');
-            $branch->brand_id = $request->get('brandId');
-            $branch->is_activated = $request->get('isActivated');
+            $branch->company_id = $request->get('company_id');
+            $branch->is_active = $request->get('isActivated');
             $branch->created_by = $logged_in->id;
             $branch->last_updated_by = $logged_in->id;
 
-            // save new contact
+            // save new branch
             $branch->save();
 
             Session::flash('flash_message', 'Branch successfully added!');
 
-            return redirect()->route('branch.index');
+            $branches = Branch::with('company')
+            ->where([
+                    ['branch.deleted_at', NULL]
+                ])
+            ->paginate(20);
+
+            return redirect()->route('branch.index', compact('branches'));
         }
     }
 
@@ -111,7 +115,7 @@ dd($user->getRoles());
                 ])
                 ->first(['branch.*', 'a1.name AS created_by', 'a2.name AS updated_by']);
 
-        $brands = Brand::all();
+        $brands = Company::all();
 
         return view('branch.edit', compact('branch', 'brands'));
     }
@@ -127,7 +131,6 @@ dd($user->getRoles());
 
         $v = $this->validate($request, [
             'name' => 'required',
-            'brandId' => 'required'
         ]);
 
         if ($v && $v->fails()) {
@@ -137,8 +140,7 @@ dd($user->getRoles());
 
             $branch->name = $request->get('name');
             $branch->address = $request->get('address');
-            $branch->brand_id = $request->get('brandId');
-            $branch->is_activated = $request->get('isActivated') != 'Y' ? 'N' : 'Y';
+            $branch->is_active = $request->get('isActivated') != 'Y' ? 'N' : 'Y';
             $branch->last_updated_by = $logged_in->id;
 
             // save new meta
@@ -170,4 +172,112 @@ dd($user->getRoles());
 
         return redirect()->route('branch.index');
     }
+
+    /**
+     * Show the add branch admin page. Where admin is manager or staff
+     */
+    public function addManager()
+    {
+        $user = Auth::user();
+        $type = 2;
+        $branches = Branch::with('company')
+            ->where([
+                    ['branch.deleted_at', NULL],
+                    ['branch.company_id', $user->company_id]
+                ])
+            ->get();
+
+        return view('branch.create-user', compact('user', 'branches', 'type'));
+    }
+
+    /**
+     * Show the add branch admin page. Where admin is manager or staff
+     */
+    public function addStaff()
+    {
+        $user = Auth::user();
+        $type = 3;
+        $branches = Branch::with('company')
+            ->where([
+                    ['branch.deleted_at', NULL],
+                    ['branch.company_id', $user->company_id]
+                ])
+            ->get();
+
+
+        return view('branch.create-user', compact('user', 'branches', 'type'));
+    }
+
+    /**
+     * Creates a new branch manager|staff
+     */
+    public function saveUser(Request $request)
+    {
+//TODO check for permission
+        $logged_in = Auth::user();
+        $validator = Validator::make($request->all(), [
+                'email' => 'required|email|unique:users',
+                'password' => 'required|min:6|confirmed',
+                'company_id' => 'required',
+                'branch_id' => 'required',
+            ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                    ->withErrors($validator->errors())
+                    ->withInput($request->all());
+        }
+        //save the new user
+        $user = new User;
+
+        $user->name = $request->get('name');
+        $user->email = $request->get('email');
+        $user->password = bcrypt($request->get('password'));
+        $user->company_id = $request->get('company_id');
+        $user->branch_id = $request->get('branch_id');
+        $user->type = $request->get('type');
+        $user->is_active = $request->get('isActivated') == 'Y' ? 'Y' : 'N';
+
+        $user->save();
+
+        //add role to user
+        if (User::$_type[$user->type] == 'manager') { //branch manager
+            $userRole = new RoleUser;
+
+            $userRole->user_id = $user->id;
+            $userRole->role_id = 2;
+
+            $userRole->save();
+        } elseif (User::$_type[$user->type] == 'staff') { //branch staff
+            $userRole = new RoleUser;
+
+            $userRole->user_id = $user->id;
+            $userRole->role_id = 3;
+
+            $userRole->save();
+        }
+
+        Session::flash('flash_message', "Branch Admin with ID " . $user->id . " successfully added!");
+
+        return $this->showUsers($logged_in->company_id);
+
+    }
+
+
+    /**
+     * Displays the list of branch users.
+     */
+    public function showUsers($companyId)
+    {
+        $logged_in = Auth::user();
+        $users = User::where([
+                    ['company_id', $companyId],
+                    ['branch_id', '!=', 0],
+                ])
+                ->paginate(20);
+
+        return view('branch.show-users', compact('users'));
+    }
+
 }
+

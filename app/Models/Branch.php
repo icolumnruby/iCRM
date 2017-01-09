@@ -16,12 +16,12 @@ class Branch extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
-    
+
     /**
      * Get the brand that owns the branch.
      */
-    public function brand()
+    public function company()
     {
-        return $this->belongsTo('App\Models\Brand');
+        return $this->belongsTo('App\Models\Company');
     }
 }

@@ -5,95 +5,84 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <h2 class="page-header">Contact Detail</h2>
+            <h2 class="page-header">Member Detail</h2><br />
+            <h4><strong>Loyalty Points:</strong> {!! $totalPoints !!}</h4><br />
 
-    @if (count($contact))
+    @if (count($member))
     <div class="col-md-5">
         <table class="table table-striped">
             <tr>
                 <th width="30%">ID</th>
-                <td>{!! $contact->id !!}</td>
+                <td>{!! $member->id !!}</td>
             </tr>
             <tr>
                 <th>Full Name</th>
-                <td>{!! App\Models\Contact::$_salutation[$contact->salutation] !!} {!! ucfirst($contact->lastname) !!}, {!! ucfirst($contact->firstname) !!} {!! ucfirst($contact->middlename) !!}</td>
+                <td>{!! App\Models\Member::$_salutation[$member->salutation] !!} {!! ucfirst($member->lastname) !!}, {!! ucfirst($member->firstname) !!} {!! ucfirst($member->middlename) !!}</td>
             </tr>
             <tr>
                 <th>Gender</th>
-                <td>{!! App\Models\Contact::$_gender[$contact->gender] !!}</td>
+                <td>{!! App\Models\Member::$_gender[$member->gender] !!}</td>
             </tr>
             <tr>
                 <th>Email</th>
-                <td>{!! $contact->email !!}</td>
+                <td>{!! $member->email !!}</td>
             </tr>
             <tr>
                 <th>Mobile</th>
-                <td>{!! $contact->mobile_country_code . $contact->mobile !!}</td>
+                <td>{!! $member->mobile_country_code . $member->mobile !!}</td>
             </tr>
             <tr>
                 <th>NRIC</th>
-                <td>{!! $contact->nric !!}</td>
+                <td>{!! $member->nric !!}</td>
             </tr>
             <tr>
                 <th>Birthdate</th>
-                <td>{!! $contact->birthdate !!}</td>
+                <td>{!! $member->birthdate !!}</td>
             </tr>
             <tr>
                 <th>Nationality</th>
-                <td>{!! $contact->nationality !!}</td>
+                <td>{!! $member->nationality !!}</td>
             </tr>
             <tr>
                 <th>Address</th>
-                <td>{!! $contact->address !!}</td>
+                <td>{!! $member->address !!}</td>
             </tr>
             <tr>
                 <th>City</th>
-                <td>{!! $contact->city !!}</td>
+                <td>{!! $member->city !!}</td>
             </tr>
             <tr>
                 <th>State</th>
-                <td>{!! $contact->state !!}</td>
+                <td>{!! $member->state !!}</td>
             </tr>
             <tr>
                 <th>Country</th>
-                <td>{!! $contact->country !!}</td>
+                <td>{!! $member->country !!}</td>
             </tr>
             <!--tr>
                 <th>Is Member</th>
-                <td>{!! $contact->is_member ? 'Yes' : 'No' !!}</td>
+                <td>{!! $member->is_member ? 'Yes' : 'No' !!}</td>
             </tr-->
             <tr>
                 <th>Member Type</th>
-                <td>{!! $contact->member_type ? App\Models\Contact::$_memberType[$contact->member_type] : '' !!}</td>
+                <td>{!! $member->member_type_id ? App\Models\Member::$_memberType[$member->member_type_id] : '' !!}</td>
             </tr>
         </table>
-
-        @if (count($contactMeta))
-        <br /> <h4><strong>Custom Fields</strong></h4>
-        <table class="table table-striped">
-            @foreach ($contactMeta as $val)
-            <tr>
-                <th width="40%">{!! $val->name !!}</th>
-                <td>{!! $val->cmv_value !!}</td>
-            </tr>
-            @endforeach
-        </table>
-        <br/>
-
-        @endif
 
         <div class="col-md-5">
-            Created: {!! date("F j, Y, g:i a", strtotime($contact->created_at)) !!} <br />
-            Created by: {!! $contact->created_by !!}
+            Created: {!! date("F j, Y, g:i a", strtotime($member->created_at)) !!} <br />
+            Created by: {!! $member->created_by !!}
         </div>
         <div class="col-md-5 pull-right">
-            Updated: {!! date("F j, Y, g:i a", strtotime($contact->updated_at)) !!} <br />
-            Last updated by: {!! $contact->updated_by !!}
+            Updated: {!! date("F j, Y, g:i a", strtotime($member->updated_at)) !!} <br />
+            Last updated by: {!! $member->updated_by !!}
         </div>
         <div class="clearfix"></div>
         <br />
-        <p class=""><a href="{!!route('contact.edit',$contact->id)!!}" class="btn btn-primary btn-m">Edit</a>
-        <a href="{!!url('transaction/create', $contact->id)!!}" class="btn btn-primary btn-m">Add Transaction</a>
+        <p class=""><a href="{!!route('member.edit',$member->id)!!}" class="btn btn-primary btn-m">Edit</a>
+        <a href="{!! url('transaction/create', $member->id) !!}" class="btn btn-primary btn-m">Add Transaction</a>
+        <a href="{!! url('member/add-points',$member->id) !!}" class="btn btn-primary btn-m">Update Points</a>
+        <a href="{!! url('rewards/items',$member->id) !!}" class="btn btn-primary btn-m">Rewards</a>
         </p>
     </div>
     @endif

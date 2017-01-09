@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Contact extends Model
+class Member extends Model
 {
     use SoftDeletes;
 
@@ -16,7 +16,7 @@ class Contact extends Model
      */
     protected $dates = ['deleted_at'];
 
-    protected $table = "contacts";
+    protected $table = "members";
 //    TODO this should be the logged in user
 //    protected $attributes = array (
 //        'updatedByUserId'  => ''
@@ -31,15 +31,25 @@ class Contact extends Model
         ];
     public static $_gender = [1 => 'Male', 2 => 'Female'];
     public static $_memberType = [
-            1 => 'Platinum',
-            2 => 'Gold'
+            1 => 'Basic',
+            2 => 'Silver',
+            3 => 'Gold',
+            4 => 'Platinum'
         ];
 
     /**
-     * Get the transactions for the contact.
+     * Get the transactions for the member.
      */
     public function transaction()
     {
         return $this->hasMany('App\Models\Transaction');
+    }
+
+    /**
+     * Get the transactions for the member.
+     */
+    public function loyaltyPoints()
+    {
+        return $this->hasMany('App\Models\MemberPoints');
     }
 }

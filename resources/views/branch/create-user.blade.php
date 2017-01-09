@@ -2,7 +2,11 @@
 
 @section('content')
 
-<h3 class="page-header">Add Branch</h3>
+@if ($type == 2)
+<h3 class="page-header">Add Branch Manager</h3>
+@elseif ($type == 3)
+<h3 class="page-header">Add Branch Staff</h3>
+@endif
 @if(Session::has('flash_message'))
     <div class="alert alert-success">
         {!! Session::get('flash_message') !!}
@@ -18,34 +22,53 @@
     </div>
 @endif
 
-<form method="POST" action="{!! route('branch.index') !!}" name="frmBranch" class="form-horizontal" id="frmBranch">
+<form method="POST" action="/branch/create-user" name="frmBranchAdmin" class="form-horizontal" id="frmBranchAdmin">
     {!! csrf_field() !!}
-    <div class="form-group required">
-        <label class="col-xs-2 control-label">Name</label>
-        <div class="col-xs-5">
-            <input type="text" name="name" id="name" placeholder="" class="form-control input-sm" />
-        </div>
-    </div>
+    <input type="hidden" name="company_id" value="{!! $user->company_id !!}" />
+    <input type="hidden" name="type" value="{!! $type !!}" />
     <div class="form-group">
-        <label class="col-xs-2 control-label">Address</label>
-        <div class="col-xs-5">
-            <input type="text" name="address" id="address" placeholder="" class="form-control input-sm" />
+        <label class="col-xs-2 control-label">Name</label>
+
+        <div class="col-xs-4">
+            <input type="text" class="form-control" name="name" value="{!! old('name') !!}">
         </div>
     </div>
     <div class="form-group required">
-        <label for="brandId" class="control-label col-xs-2">Brand</label>
-        <div class="col-xs-5">
-            <select class="form-control input-sm col-xs-4" id="brandId" name="brandId">
+        <label for="country" class="col-xs-2 control-label">Branch</label>
+        <div class="col-xs-4">
+            <select class="form-control input-sm col-xs-4" id="branch_id" name="branch_id">
                 <option value="">Please Choose</option>
-            @if (count($brands))
-                @foreach ($brands as $brand)
-                <option value="{!! $brand->id !!}">{!! $brand->name !!}</option>
-                @endforeach
-            @endif
+                @if (count($branches))
+                    @foreach ($branches as $val)
+                            <option value="{!!$val->id!!}" {!! ($val->id == old('branch_id')) ? 'selected="selected"' : '' !!}>{!!$val->name!!}</option>
+                    @endforeach
+                @endif
             </select>
         </div>
     </div>
-    <div class="form-group form-inline">
+    <div class="form-group required">
+        <label class="col-xs-2 control-label">E-Mail Address</label>
+
+        <div class="col-xs-4">
+            <input type="email" class="form-control" name="email" value="{!! old('email') !!}">
+        </div>
+    </div>
+
+    <div class="form-group required">
+        <label class="col-xs-2 control-label">Password</label>
+
+        <div class="col-xs-4">
+            <input type="password" class="form-control" name="password">
+        </div>
+    </div>
+    <div class="form-group required">
+        <label class="col-xs-2 control-label">Confirm Password</label>
+
+        <div class="col-xs-4">
+            <input type="password" class="form-control" name="password_confirmation">
+        </div>
+    </div>
+    <div class="form-group">
         <label for="isActivated" class="col-xs-2 control-label">Activated</label>
         <div class="checkbox col-xs-2">
             <label>
@@ -56,7 +79,7 @@
 
     <div class="form-group">
         <div class="col-xs-offset-2 col-xs-10">
-            <button type="submit" class="btn btn-primary" name="addContact">Add Branch</button>
+            <button type="submit" class="btn btn-primary" name="addContact">Add Branch Admin</button>
         </div>
     </div>
 </form>
@@ -64,23 +87,48 @@
 <script type="text/javascript">
 $(function() {
     $("[name='isActivated']").bootstrapSwitch();
-    $('#frmBranch').formValidation({
+    $('#frmBranchAdmin').formValidation({
         framework: 'bootstrap',
         icon: {
-            invalid: 'glyphicon glyphicon-remove',
+            invalid: 'glyphicon glyphicon-remove'
         },
         fields: {
-            name: {
+            email: {
                 validators: {
                     notEmpty: {
-                        message: 'Name is required'
+                        message: 'Email is required'
+                    },
+                    email: {
+                        message: 'The input is not a valid email address'
+                    },
+                    regexp: {
+                        regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
+                        message: 'The value is not a valid email address'
                     }
                 }
             },
-            brandId: {
+            branch_id: {
                 validators: {
                     notEmpty: {
-                        message: 'Brand is required'
+                        message: 'Branch is required'
+                    }
+                }
+            },
+            password: {
+                validators: {
+                    notEmpty: {
+                        message: 'The password is required and cannot be empty'
+                    }
+                }
+            },
+            confirm_password: {
+                validators: {
+                    notEmpty: {
+                        message: 'The confirm password is required and cannot be empty'
+                    },
+                    identical: {
+                        field: 'password',
+                        message: 'The password and its confirm must be the same'
                     }
                 }
             }

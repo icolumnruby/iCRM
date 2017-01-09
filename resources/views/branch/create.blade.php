@@ -20,6 +20,7 @@
 
 <form method="POST" action="{!! route('branch.index') !!}" name="frmBranch" class="form-horizontal" id="frmBranch">
     {!! csrf_field() !!}
+    <input type="hidden" name="company_id" value="{!! $user->company_id !!}" />
     <div class="form-group required">
         <label class="col-xs-2 control-label">Name</label>
         <div class="col-xs-5">
@@ -30,19 +31,6 @@
         <label class="col-xs-2 control-label">Address</label>
         <div class="col-xs-5">
             <input type="text" name="address" id="address" placeholder="" class="form-control input-sm" />
-        </div>
-    </div>
-    <div class="form-group required">
-        <label for="brandId" class="control-label col-xs-2">Brand</label>
-        <div class="col-xs-5">
-            <select class="form-control input-sm col-xs-4" id="brandId" name="brandId">
-                <option value="">Please Choose</option>
-            @if (count($brands))
-                @foreach ($brands as $brand)
-                <option value="{!! $brand->id !!}">{!! $brand->name !!}</option>
-                @endforeach
-            @endif
-            </select>
         </div>
     </div>
     <div class="form-group form-inline">
@@ -67,7 +55,7 @@ $(function() {
     $('#frmBranch').formValidation({
         framework: 'bootstrap',
         icon: {
-            invalid: 'glyphicon glyphicon-remove',
+            invalid: 'glyphicon glyphicon-remove'
         },
         fields: {
             name: {
@@ -77,13 +65,6 @@ $(function() {
                     }
                 }
             },
-            brandId: {
-                validators: {
-                    notEmpty: {
-                        message: 'Brand is required'
-                    }
-                }
-            }
         }
     });
 

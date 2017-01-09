@@ -9,11 +9,12 @@
 </div>
 @endif
 
-@if (count($branch))
+@if (count($branches))
 
 <form class="form-inline pull-right" style="padding-bottom: 10px;">
     <input class="form-control input-sm" type="text" placeholder="Search">
     <button class="btn btn-success-outline btn-sm" type="submit">Search</button>
+    <a href="{{route('branch.create')}}" class="btn btn-success btn-sm">Create New</a>
     <div class="clearfix"></div>
 </form>
 
@@ -22,16 +23,16 @@
         <th>ID</th>
         <th>Name</th>
         <th>Address</th>
-        <th>Brand</th>
+        <th>Company</th>
         <th>Activated</th>
         <th width="7%" colspan="4">Actions</th>
     </tr>
-    @foreach ($branch as $val)
+    @foreach ($branches as $val)
     <tr>
         <td>{!! $val->id !!}</td>
         <td>{!! $val->name or ''!!}</td>
-        <td>{!! $val->address !!}</td>
-        <td>{!! $val->brand->name !!}</td>
+        <td>{!! $val->address or '' !!}</td>
+        <td>{!! $val->company->name !!}</td>
         <td>{!! $val->is_activated == 'Y' ? 'Yes' : 'No' !!}</td>
         <td><a href="{!! route('branch.show', $val->id)!!}" class="btn btn-primary btn-xs">View</a></td>
         <td><a href="{!! route('branch.edit', $val->id) !!}" class="btn btn-warning btn-xs">Edit</a></td>
@@ -48,7 +49,7 @@
     </tr>
     @endforeach
 </table>
-{!! $branch->links() !!}
+{!! $branches->links() !!}
 @else
     No Branch(es) found!
 @endif

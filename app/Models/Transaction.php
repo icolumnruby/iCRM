@@ -38,7 +38,7 @@ class Transaction extends Model
         ],
         6 => [
             10 => 'Apple Pay',
-            11 => 'SamsungPay',
+            11 => 'Samsung Pay',
             12 => 'Dash',
             13 => 'DBS Paylah',
             14 => 'GoogleWallet',
@@ -51,13 +51,8 @@ class Transaction extends Model
             2 => 'Void'
         ];
 
-    public function contact()
+    public function member()
     {
-        return $this->belongsTo('App\Models\Contact');
-    }
-
-    public function product()
-    {
-        return $this->belongsTo('App\Models\Product');
+        return $this->belongsTo('App\Models\Member');
     }
 }

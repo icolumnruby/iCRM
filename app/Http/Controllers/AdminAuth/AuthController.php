@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\AdminAuth;
 
 use App\Models\User;
+use App\Models\Company;
+use Mail;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -51,10 +53,12 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
+                'code' => 'required|max:255',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:6|confirmed',
+                'mobile' => 'required',
+                'g-recaptcha-response'  => 'required'
+            ]);
     }
 
     /**
@@ -65,16 +69,32 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        $company = new Company;
+
+        $company->company_code = $data['code'];
+        $company->mobile = $data['mobile'];
+        $company->country_id = $data['country_id'];
+
+        $company->save();
+
+        //save the new user
+        $user = new User;
+
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = bcrypt($data['password']);
+        $user->is_active = 'N';
+        $user->company_id = $company->id;
+        $user->type = 1;
+
+        $user->save();
+//$this->notifyMerchant($user);
+        return true;
     }
 
     public function authenticate(array $data)
     {
-        if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+        if (Auth::attempt(['email' => $data['email'], 'password' => $data['password'], 'is_active' => 'Y'])) {
             // Authentication passed...
             return redirect()->intended('/admin');
         }
@@ -91,6 +111,24 @@ class AuthController extends Controller
 
     public function showRegistrationForm()
     {
-        return view('admin.register');
+        $countries = \App\Models\Country::all();
+        $attributes = [
+            'data-theme' => 'dark',
+            'data-type' =>  'audio',
+        ];
+
+        return view('admin.register', compact('countries', 'attributes'));
+    }
+
+    /**
+     * Send an email to Merchant that their registration needs admin approval
+     */
+    public function notifyMerchant($user)
+    {
+        Mail::send('admin.emails.notify-admin', ['user' => $user], function ($m) use ($user) {
+            $m->from('ruby@icolumn.com', 'Your Application');
+
+            $m->to($user->email, $user->name)->subject('Your Reminder!');
+        });
     }
 }

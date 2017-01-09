@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12">
-<h3 class="page-header">Update Brand</h3>
+<h3 class="page-header">Update Company Detail</h3>
 
 @if(Session::has('flash_message'))
 <div class="alert alert-success">
@@ -24,7 +24,7 @@
 @endif
 
 @if (count($brand))
-    {!! Form::model($brand,['method' => 'PATCH','route'=>['brand.update',$brand->id], 'class'=>'form-horizontal', 'id'=>'frmBrand']) !!}
+    {!! Form::model($brand,['method' => 'PATCH','route'=>['company.update',$brand->id], 'class'=>'form-horizontal', 'id'=>'frmBrand']) !!}
     {!! csrf_field() !!}
     <div class="form-group">
         <label class="col-xs-2 control-label">Name</label>
@@ -33,12 +33,18 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="col-xs-2 control-label">Company Code</label>
+        <div class="col-xs-5">
+            <input type="text" name="name" id="companyCode" placeholder="" class="form-control input-sm" value="{!! $brand->company_code !!}" />
+        </div>
+    </div>
+    <div class="form-group">
         <label class="col-xs-2 control-label">Description</label>
         <div class="col-xs-5">
             <textarea name="description" id="description" placeholder="" rows="2" class="form-control input-sm">{!! $brand->description !!}</textarea>
         </div>
     </div>
-    <div class="form-group">
+    <!--div class="form-group">
         <label for="categoryId" class="control-label col-xs-2">Category</label>
         <div class="col-xs-5">
             <select class="form-control input-sm col-xs-4" id="categoryId" name="categoryId">
@@ -46,14 +52,14 @@
                 <option value="34">Hair</option>
             </select>
         </div>
-    </div>
+    </div-->
     <div class="form-group form-inline">
         <label for="isActivated" class="col-xs-2 control-label">Activated</label>
         <div class="checkbox col-xs-2">
             <label>
                 <input type="checkbox" name="isActivated" id="isActivated" value="Y"
                        data-size="small" checked="checked" data-on-text="YES" data-off-text="NO"
-                       {!! $brand->is_activated == 'Y' ? 'checked="checked"' : '' !!}>
+                       {!! $brand->is_active == 'Y' ? 'checked="checked"' : '' !!}>
             </label>
         </div>
     </div>
@@ -61,7 +67,7 @@
     <div class="form-group">
         <div class="col-xs-offset-2 col-xs-10">
             {!! Form::submit('Update', ['class' => 'btn btn-primary']) !!}
-            <a class="btn btn-link" href="{{route('brand.index')}}">Cancel</a>
+            <a class="btn btn-link" href="{{route('company.index')}}">Cancel</a>
         </div>
     </div>
     {!! Form::close() !!}
@@ -77,7 +83,7 @@
         <div class="clearfix"></div>
     </div>
 @else
-    Transaction doesn't exist!
+    Company doesn't exist!
 @endif
 </div>
 </div>
