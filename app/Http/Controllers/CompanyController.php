@@ -185,18 +185,32 @@ class CompanyController extends Controller
                         "foregroundColor"=> $request->get('foregroundColor'),
                         "backgroundColor"=> $request->get('backgroundColor'),
                         "storeCard" => array(
+                            "headerFields"=> array(
+                                array(
+                                    "key"=> "memberType",
+                                    "label"=> "Member Type",
+                                    "value"=> "\${memberType}"
+                                )
+                            ),
                             "primaryFields"=> array(
                                 array(
                                     "key"=> "points",
-                                    "label"=> "points",
-                                    "value"=> "$(memberPoints)"
+                                    "label"=> "Points",
+                                    "value"=> "\${memberPoints}"
                                 )
                             ),
-                            "auxiliaryFields"=> array(
+                            "secondaryFields"=> array(
                                 array(
-                                    "key"=> "companyId",
-                                    "label"=> "Company ID",
-                                    "value"=> $request->get('companyId')
+                                    "key"=> "memberName",
+                                    "label"=> "Member Name",
+                                    "value"=> "\${firstName} \${lastName}"
+                                )
+                            ),
+                            "backFields"=> array(
+                                array(
+                                    "key"=> "validAt",
+                                    "label"=> "Valid At",
+                                    "value"=> $request->get('name')
                                 )
                             )
                         )

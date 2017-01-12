@@ -10,6 +10,8 @@ use App\Models\MemberPoints;
 use App\Models\MemberPointsTxn;
 use App\Models\LoyaltyConfig;
 use App\Http\Controllers\Controller;
+use App\Classes\PassSlotClass;
+use App\Classes\PassSlotApiException;
 use Maatwebsite\Excel\Facades\Excel;
 use Session;
 use Auth;
@@ -188,6 +190,39 @@ class MemberController extends Controller {
                 $memberPointsTxn->save();
             }
 
+            //create pass for member from company's template ID
+            $appKey = env('PASSSLOT_KEY');
+            $company = Company::findOrFail($logged_in->company_id);
+            $passTemplateId = $company->passslot_template_id;
+
+            try {
+                $engine = PassSlotClass::start($appKey);
+                $data = array(
+                  "firstName"=>$request->get('firstname'),
+                  "lastName"=>$request->get('lastname'),
+                  "memberType"=>Member::$_memberType[$request->get('memberTypeId')],
+                  "memberPoints"=>MemberPoints::_getPoints($member_id)
+                );
+                $response = $engine->createPassFromTemplate($passTemplateId, $data);
+                $responseArr = json_decode($response, true);
+
+                if (isset($responseArr['serialNumber'])) {
+                    $member = Member::findOrFail($member_id);
+
+                    $member->pass_serial_number = $responseArr['serialNumber'];
+                    $member->pass_type_id = $responseArr['passTypeIdentifier'];
+                    $member->pass_url = $responseArr['url'];
+                    $member->save();
+
+                    Session::flash('flash_message', "PassSlot Pass was created successfully.");
+                } else {
+                    Session::flash('error_message', "Error saving pass. Please try again!");
+                }
+              } catch (PassSlotApiException $e) {
+                Session::flash('error_message', "Error creating pass. Please try again!");
+                return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
+              }
+
             Session::flash('flash_message', "Member with ID $member_id was successfully added!");
 
             return redirect()->route('member.index');
@@ -283,6 +318,20 @@ class MemberController extends Controller {
         $loggedin = Auth::user();
         $member = Member::findOrFail($id);
 
+        //remove pass from PassSlot before deleting
+        $appKey = env('PASSSLOT_KEY');
+
+        try {
+            $engine = PassSlotClass::start($appKey);
+            $pass = new \stdClass();
+            $pass->passTypeIdentifier = $member->pass_type_id;
+            $pass->serialNumber = $member->pass_serial_number;
+            $response = $engine->deletePass($pass);
+          } catch (PassSlotApiException $e) {
+            Session::flash('error_message', "Error deleting pass. Please try again!");
+            return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
+          }
+
         //update last_updated_by before deleting
         $member->last_updated_by = $loggedin->id;
         $member->save();
@@ -320,6 +369,61 @@ class MemberController extends Controller {
         }
 
         return view('member.export');
+    }
+
+    //download member's pass
+    /**
+     * Outputs pass from specified resource.
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function downloadPass($id)
+    {
+        $member = Member::findOrFail($id);
+        $appKey = env('PASSSLOT_KEY');
+
+        try {
+            $engine = PassSlotClass::start($appKey);
+            $pass = new \stdClass();
+            $pass->passTypeIdentifier = $member->pass_type_id;
+            $pass->serialNumber = $member->pass_serial_number;
+            $engine->outputPass($pass);
+          } catch (PassSlotApiException $e) {
+            Session::flash('error_message', "Error deleting pass. Please try again!");
+            return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
+          }
+          return redirect()->route('member.index');
+    }
+
+    //email member's pass
+    /**
+     * Emails pass from specified resource.
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function emailPass($id)
+    {
+        $member = Member::findOrFail($id);
+        $appKey = env('PASSSLOT_KEY');
+
+        try {
+            $engine = PassSlotClass::start($appKey);
+            $pass = new \stdClass();
+            $pass->passTypeIdentifier = $member->pass_type_id;
+            $pass->serialNumber = $member->pass_serial_number;
+            $email = $member->email;
+            // $response = $engine->downloadPass($pass);
+            $engine->emailPass($pass, $email);
+          } catch (PassSlotApiException $e) {
+            Session::flash('error_message', "Error deleting pass. Please try again!");
+            return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
+          }
+
+          Session::flash('flash_message', 'Pass successfully sent!');
+
+          return redirect()->route('member.index');
     }
 
 
