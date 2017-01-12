@@ -15,6 +15,8 @@
     <input class="form-control input-sm" type="text" placeholder="Search">
     <button class="btn btn-success-outline btn-sm" type="submit">Search</button>
     <a href="{{route('branch.create')}}" class="btn btn-success btn-sm">Create New</a>
+    <a href="{{route('branch.add-staff')}}" class="btn btn-primary btn-sm">Add Staff</a>
+    <a href="{{route('branch.add-manager')}}" class="btn btn-warning btn-sm">Add Manager</a>
     <div class="clearfix"></div>
 </form>
 

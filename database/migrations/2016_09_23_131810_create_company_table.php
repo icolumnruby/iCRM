@@ -17,7 +17,6 @@ class CreateCompanyTable extends Migration
             $table->string('name');
             $table->string('company_code');
             $table->string('description')->nullable();
-            $table->integer('category_id');
             $table->integer('mobile');
             $table->enum('is_active', ['Y', 'N'])->nullable()->default('N');
             $table->string('address')->nullable();
