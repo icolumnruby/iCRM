@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Classes\PassSlotClass;
 use App\Classes\PassSlotApiException;
 use App\Models\Company;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use Session;
 use Auth;
@@ -31,14 +32,13 @@ class CompanyController extends Controller
     public function show($id)
     {
         $logged_in = Auth::user();
-        $brand = Company::leftJoin('users AS a1', 'company.created_by', '=', 'a1.id')
-                ->leftJoin('users AS a2', 'company.last_updated_by', '=', 'a2.id')
-                ->where([
-                    ['company.id', $id],
-                ])
-                ->first(['company.*', 'a1.name AS created_by', 'a2.name AS updated_by']);
+        $company = Company::find($id);
 
-        return view('company.show', compact('brand'));
+        if ($company) {
+            return $this->edit($id);
+        }
+
+        return $this->create();
     }
 
     /**
@@ -48,7 +48,9 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('company.create');
+        $countries = Country::all();
+
+        return view('company.create', compact('countries'));
     }
 
     /**
@@ -73,6 +75,11 @@ class CompanyController extends Controller
             $brand = new Company;
             $brand->name = $request->get('name');
             $brand->description = $request->get('description');
+            $brand->address = $request->get('address');
+            $brand->city = $request->get('city');
+            $brand->state = $request->get('state');
+            $brand->country_id = $request->get('countryId');
+            $brand->postal_code = $request->get('postalCode');
             $brand->passslot_template_id = $request->get('templateId');
 
             $brand->is_active = $request->get('isActivated');
@@ -91,6 +98,7 @@ class CompanyController extends Controller
     }
 
     public function edit($id) {
+        $countries = Country::all();
         $brand = Company::leftJoin('users AS a1', 'company.created_by', '=', 'a1.id')
                 ->leftJoin('users AS a2', 'company.last_updated_by', '=', 'a2.id')
                 ->where([
@@ -100,7 +108,7 @@ class CompanyController extends Controller
                 ])
                 ->first(['company.*', 'a1.name AS created_by', 'a2.name AS updated_by']);
 
-        return view('company.edit', compact('brand'));
+        return view('company.edit', compact('brand', 'countries'));
     }
 
     /**

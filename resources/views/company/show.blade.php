@@ -27,7 +27,7 @@
             </tr>
         </table>
         <p class="">
-            <a href="{!!route('brand.edit',$brand->id)!!}" class="btn btn-primary btn-m">Edit</a>
+            <a href="{!!route('company.edit',$brand->id)!!}" class="btn btn-primary btn-m">Edit</a>
         </p>
         <div style="padding: 20px 0;">
             <div class="pull-left">

@@ -8,9 +8,6 @@
 
                 <div class="panel-body">
                     <nav class="navbar navbar-light bg-faded">
-                        <a class="navbar-brand" href="/register">Merchant Signup</a>
-                    </nav>
-                    <nav class="navbar navbar-light bg-faded">
                         <a class="navbar-brand" href="#">About Us</a>
                     </nav>
                     <nav class="navbar navbar-light bg-faded">

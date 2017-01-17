@@ -33,12 +33,40 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="categoryId" class="control-label col-xs-2">Category</label>
-        <div class="col-xs-5">
-            <select class="form-control input-sm col-xs-4" id="categoryId" name="categoryId">
-                <option value="33">Health</option>
-                <option value="34">Hair</option>
+        <label for="state" class="col-xs-2 control-label">Address</label>
+        <div class="col-xs-4">
+            <input type="text" name="address" id="address" placeholder="i.e. District 2 Riverside Drive" class="form-control input-sm" value="{!!old('address')!!}" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="city" class="col-xs-2 control-label">City</label>
+        <div class="col-xs-4">
+            <input type="text" name="city" id="city" placeholder="i.e. Los Angeles" class="form-control input-sm" value="{!!old('city')!!}" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="state" class="col-xs-2 control-label">State/Province</label>
+        <div class="col-xs-4">
+            <input type="text" name="state" id="state" placeholder="i.e. California" class="form-control input-sm" value="{!!old('state')!!}" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="country" class="col-xs-2 control-label">Country</label>
+        <div class="col-xs-4">
+            <select class="form-control input-sm col-xs-4" id="countryId" name="countryId">
+                <option value="">Please Choose</option>
+    @if (count($countries))
+        @foreach ($countries as $val)
+                <option value="{!!$val->id!!}" {!! ($val->name == 'Singapore') ? 'selected="selected"' : '' !!}>{!!$val->name!!}</option>
+        @endforeach
+    @endif
             </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="postalCode" class="col-xs-2 control-label">Postal Code</label>
+        <div class="col-xs-4">
+            <input type="text" name="postalCode" id="postalCode" placeholder="i.e. 445701" class="form-control input-sm" value="{!!old('postalCode')!!}" />
         </div>
     </div>
     <div class="form-group form-inline">

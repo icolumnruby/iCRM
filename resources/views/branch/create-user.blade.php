@@ -79,7 +79,11 @@
 
     <div class="form-group">
         <div class="col-xs-offset-2 col-xs-10">
-            <button type="submit" class="btn btn-primary" name="addContact">Add Branch Admin</button>
+        @if ($type == 2)
+            <button type="submit" class="btn btn-primary" name="addContact">Add Branch Manager</button>
+        @elseif ($type == 3)
+            <button type="submit" class="btn btn-primary" name="addContact">Add Branch Staff</button>
+        @endif
         </div>
     </div>
 </form>

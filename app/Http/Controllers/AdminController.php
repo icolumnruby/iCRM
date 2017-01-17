@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Models\Member;
+use App\Models\Transaction;
 use Kodeine\Acl\Models\Eloquent\Permission;
 use Kodeine\Acl\Models\Eloquent\Role;
+use Auth;
 
 class AdminController extends Controller
 {
@@ -19,7 +22,20 @@ class AdminController extends Controller
 //var_dump($admin->can('create.product.category'));
 //var_dump($admin->is('administrator'));
 //var_dump($admin->getPermissions());exit;
-        return view('admin.dashboard');
+        $logged_in = Auth::user();
+        $members['total'] = Member::where([
+                    ['members.company_id', $logged_in->company_id],
+                ])
+                ->get()
+                ->count();
+
+        $members['transactions'] = Transaction::where([
+                    ['updated_at', '>=', date('Y-m-d', strtotime('-7 days'))],
+                ])
+                ->get()
+                ->count();
+
+        return view('admin.dashboard', compact('members'));
     }
 
     public function createPermission()

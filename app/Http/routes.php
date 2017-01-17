@@ -12,8 +12,8 @@ Route::group(
 Route::group(
     ['middleware' => ['admin', 'acl'], 'is' => 'administrator|manager', 'can' => 'create.branch, view.branch, update.branch, delete.branch'],
     function () {
-        Route::get('/branch/add-manager', 'BranchController@addManager');
-        Route::get('/branch/add-staff', 'BranchController@addStaff');
+        Route::get('/branch/add-manager', 'BranchController@addManager')->name('branch.add-manager');
+        Route::get('/branch/add-staff', 'BranchController@addStaff')->name('branch.add-staff');
         Route::post('/branch/create-user', 'BranchController@saveUser');
         Route::get('/branch/show-users/{companyId?}', 'BranchController@showUsers');
         Route::resource('branch', 'BranchController');

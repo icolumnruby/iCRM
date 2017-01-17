@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Member;
+use App\Models\Branch;
 use App\Models\Country;
 use App\Models\Nationality;
 use App\Models\MemberPoints;
@@ -89,7 +90,9 @@ class MemberController extends Controller {
         $countries = Country::all();
         $nationalities = Nationality::all();
 
-        return view('member.create', compact('countries', 'nationalities'));
+        $branch = Branch::find($logged_in->branch_id);
+
+        return view('member.create', compact('countries', 'nationalities', 'branch'));
     }
 
     /**

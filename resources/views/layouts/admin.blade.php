@@ -98,15 +98,6 @@
                         <li>
                             <a href="/admin"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        @role('administrator')
-                        <li>
-                            <a href="/contact"><i class="fa fa-sitemap fa-fw"></i> Company<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li><a href="/company/create">Create</a></li>
-                                <li><a href="/company">View</a></li>
-                            </ul>
-                        </li>
-                        @endrole
                         @role('administrator|manager')
                         <li>
                             <a href="/contact"><i class="fa fa-sitemap fa-fw"></i> Branch<span class="fa arrow"></span></a>
@@ -153,6 +144,18 @@
                             </ul>
                         </li>
                         <li>
+                            <a href="#"><i class="fa fa-money fa-fw"></i> Rewards<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/rewards/">Rewards List</a>
+                                </li>
+                                <li>
+                                    <a href="/rewards/create">Add Rewards</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <!--li>
                             <a href="#"><i class="fa fa-money fa-fw"></i> GWP<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
@@ -160,24 +163,20 @@
                                 </li>
 
                             </ul>
-                        </li>
+                        </li-->
                         <li>
                             <a href="#"><i class="fa fa-cogs fa-fw"></i> Configurations<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
+                                @role('administrator')
+                                <li>
+                                    <li><a href="/company/{{ Auth::user()->company_id }}">Company Detail</a></li>
+                                </li>
+                                @endrole
                                 <li>
                                     <a href="/product/category/">Product Category List</a>
                                 </li>
                                 <li>
                                     <a href="/product/category/create">Create Product Category</a>
-                                </li>
-                                <li>
-                                    <a href="/rewards/">Rewards List</a>
-                                </li>
-                                <li>
-                                    <a href="/rewards/create">Add Rewards</a>
-                                </li>
-                                <li>
-                                    <a href="/rewards/create">Create PassSlot Template</a>
                                 </li>
                             </ul>
                         </li>
@@ -206,6 +205,10 @@
 
         <!-- Metis Menu Plugin JavaScript -->
         <script src="{{ URL::asset('js/sb-admin-2/metisMenu.min.js') }}"></script>
+
+        <!-- Morris Charts JavaScript -->
+        <script src="{{ URL::asset('js/raphael.min.js') }}"></script>
+        <script src="{{ URL::asset('js/morris.min.js') }}"></script>
 
         <!-- Custom Theme JavaScript -->
         <script src="{{ URL::asset('js/sb-admin-2/sb-admin-2.js') }}"></script>
