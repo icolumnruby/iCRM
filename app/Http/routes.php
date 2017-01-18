@@ -87,6 +87,9 @@ Route::group(['middlewareGroups' => ['web']],
 
         Route::get('/admin', 'AdminController@index');
 
+        //setup routes
+        Route::get('/setup', 'SetupController@index');
+
     //    DELETE THIS
         Route::get('/admin/create-permission', 'AdminController@createPermission');
         Route::get('/admin/create-role', 'AdminController@createRole');

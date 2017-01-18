@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\Member;
 use App\Models\Transaction;
+use App\Models\Company;
 use Kodeine\Acl\Models\Eloquent\Permission;
 use Kodeine\Acl\Models\Eloquent\Role;
 use Auth;
@@ -35,7 +36,24 @@ class AdminController extends Controller
                 ->get()
                 ->count();
 
-        return view('admin.dashboard', compact('members'));
+        $company['has_setup'] = Company::where([
+                    ['company.id', $logged_in->company_id],
+                    ['company.has_setup', 'N'],
+                ])
+                ->get()
+                ->count();
+
+        $company = Company::where([
+                    ['company.id', $logged_in->company_id],
+                ])
+                ->get()
+                ->count();
+
+        if ($company['has_setup']) {
+          return redirect('setup');
+        }
+
+        return view('admin.dashboard', compact('members', 'company'));
     }
 
     public function createPermission()
