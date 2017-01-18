@@ -1,0 +1,42 @@
+.side-nav, .side-nav.fixed {
+  background-color: $sidenav-bg-color;
+  a {
+    padding: 0 $sidenav-padding;
+  }
+  li > a > i,
+  li > a > [class^="mdi-"], li > a > [class*="mdi-"],
+  li > a > i.material-icons {
+    float: left;
+    height: $sidenav-item-height;
+    line-height: $sidenav-item-height;
+    margin: 0 $sidenav-padding 0 0;
+    width: $sidenav-item-height / 2;
+    color: rgba(255,255,255,.75);
+    font-size: 1rem;
+
+    &.right  {
+      margin: 0 0 0 $sidenav-padding;
+    }
+  }
+
+  li.header > a{
+    height: $navbar-height;
+    line-height: $navbar-height;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  li.active {
+    background-color: $sidenav-active-color;
+     a {
+       color: rgba(255,255,255,.90);
+       i {
+         color: rgba(255,255,255,.90);
+       }
+     }
+  }
+
+  .collapsible-body {
+    background-color: $sidenav-active-color;
+  }
+}

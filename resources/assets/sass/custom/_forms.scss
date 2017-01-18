@@ -1,0 +1,71 @@
+.input-field {
+
+  &.required {
+    label:after {
+        content:"*";
+        color:red;
+      }
+  }
+  &.input-group {
+
+    .form-control {
+      padding-right: $button-height*1.5;
+      box-sizing: border-box;
+    }
+    .btn-form {
+      position: absolute;
+      width: $button-height*1.5;
+      right: 0;
+      top: 0;
+      height: 3rem;
+      line-height: 3rem;
+      i {
+        line-height: inherit;
+      }
+    }
+  }
+
+}
+input:not([type]),
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=url],
+input[type=time],
+input[type=date],
+input[type=datetime],
+input[type=datetime-local],
+input[type=tel],
+input[type=number],
+input[type=search],
+textarea.materialize-textarea {
+  // Valid Input Style
+  &.parsley-success,
+  &:focus.parsley-success {
+    border-bottom: 1px solid $input-success-color;
+    box-shadow: 0 1px 0 0 $input-success-color;
+    & + label {
+      color: $input-success-color;
+    }
+  }
+
+  // Invalid Input Style
+  &.parsley-error,
+  &:focus.parsley-error {
+    border-bottom: $input-invalid-border;
+    box-shadow: 0 1px 0 0 $input-error-color;
+    & + label {
+      color: $input-error-color;
+    }
+  }
+}
+
+.parsley-errors-list {
+  color: $input-error-color;
+  font-size: 0.9rem;
+  ul {
+    li:first-child {
+      margin-top: 0;
+    }
+  }
+}

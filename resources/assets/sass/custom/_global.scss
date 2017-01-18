@@ -1,0 +1,90 @@
+body {
+    font-family: 'Lato';
+}
+
+header, main, footer {
+  padding-left: 300px;
+}
+
+@media only screen and (max-width : 992px) {
+  header, main, footer {
+    padding-left: 0;
+  }
+}
+
+//clearfix
+
+.clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+// Table stuff
+table {
+  .btn {
+    white-space: nowrap;
+  }
+  &.responsive-table {
+    .btn-xs {
+      @media #{$medium-and-down} {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Wrappers gotta wrap
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.qr-wrapper {
+  width: 100%;
+  background-color: #fff;
+  text-align: center;
+  svg {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    display: block;
+    margin: auto;
+  }
+}
+
+// From Custom
+.fa-btn {
+    margin-right: 6px;
+}
+
+.sidebar {
+    position: fixed;
+}
+
+.scrollable {
+    height: 100%;
+    overflow: auto;
+}
+
+.productsAjax {
+    background: whitesmoke;
+    width: 30%;
+}
+
+.productsAjax li {
+    list-style-type: none;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: -15px;
+    line-height: 25px;
+}
+
+.bootstrap-datetimepicker-widget>ul {
+    padding: 0;
+}
+
+.rewardsList > div {
+    width: 25%;
+}

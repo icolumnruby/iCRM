@@ -1,0 +1,31 @@
+// @mixin box-shadow-2($args1, $args2) {
+//     -webkit-box-shadow: $args1, $args2;
+//     -moz-box-shadow: $args1, $args2;
+//     box-shadow: $args1, $args2;
+// }
+
+@mixin gradient (
+$bgColor,       // background-color
+$angle,         // gradient angle
+$gradientColor, // gradient color
+$opacityStart,  // opacity at start > 1 - 0
+$opacityEnd     // opacity at end > 1 - 0
+) {
+  background-color: $bgColor;
+  background-image: linear-gradient(
+    ($angle * 1deg),
+    rgba($gradientColor, $opacityStart),
+    rgba($gradientColor, $opacityEnd)
+  );
+  background-size: 100% 100%;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
