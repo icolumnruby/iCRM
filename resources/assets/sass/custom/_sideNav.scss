@@ -1,5 +1,6 @@
 .side-nav, .side-nav.fixed {
   background-color: $sidenav-bg-color;
+  z-index: 9999;
   a {
     padding: 0 $sidenav-padding;
   }
@@ -34,6 +35,12 @@
          color: rgba(255,255,255,.90);
        }
      }
+  }
+
+  .collapsible-header {
+    i {
+      text-align: left;
+    }
   }
 
   .collapsible-body {

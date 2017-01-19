@@ -36,24 +36,24 @@ class AdminController extends Controller
                 ->get()
                 ->count();
 
-        $company['has_setup'] = Company::where([
+        $company['setup'] = Company::where([
                     ['company.id', $logged_in->company_id],
                     ['company.has_setup', 'N'],
                 ])
                 ->get()
                 ->count();
 
-        $company = Company::where([
-                    ['company.id', $logged_in->company_id],
-                ])
-                ->get()
-                ->count();
+        // $company = Company::where([
+        //             ['company.id', $logged_in->company_id],
+        //         ])
+        //         ->get()
+        //         ->count();
 
-        if ($company['has_setup']) {
+        if ($company['setup']) {
           return redirect('setup');
         }
 
-        return view('admin.dashboard', compact('members', 'company'));
+        return view('admin.dashboard', compact('members'));
     }
 
     public function createPermission()

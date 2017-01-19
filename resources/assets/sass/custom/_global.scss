@@ -1,7 +1,3 @@
-body {
-    font-family: 'Lato';
-}
-
 header, main, footer {
   padding-left: 300px;
 }
@@ -87,4 +83,17 @@ table {
 
 .rewardsList > div {
     width: 25%;
+}
+
+.file-field {
+  margin-top: $margin-double;
+}
+
+// Steps list as used on setup main page
+.steps-list {
+  li {
+    display: inline-block;
+    margin: 1rem 1.5rem;
+    flex-grow: 1;
+  }
 }

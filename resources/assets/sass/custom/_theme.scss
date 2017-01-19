@@ -26,6 +26,31 @@
 
 }
 
+// Theme gradients
+
+.brand-gradient {
+    @include gradient($brand-bg-color, 315, $brand-bg-highlight, 0, 0.2);
+    &.btn {
+      &:hover, &.active {
+        @include gradient(adjust-hue($brand-invert-bg-color, 10%), 315, $brand-invert-bg-highlight, 0, 0.2);
+      }
+    }
+}
+
+// Theme Buttons
+
+.btn {
+  &.brand-ghost {
+    background: none;
+    border: 1px solid $brand-invert-bg-color;
+    color: $brand-invert-bg-color;
+    &:hover, &.active {
+      @include gradient(adjust-hue($brand-invert-bg-color, 10%), 315, $brand-invert-bg-highlight, 0, 0.2);
+      color: $button-raised-color;
+    }
+  }
+}
+
 // Brand themes
 
 .dark {

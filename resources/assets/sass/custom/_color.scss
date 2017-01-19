@@ -331,6 +331,14 @@ $grey: (
   "darken-4":   #212121
 );
 
+$brand-primary: (
+  "base":       #00bcd4
+);
+
+$brand-invert: (
+  "base":       adjust-hue(#00bcd4, 130%)
+);
+
 $shades: (
   "black":        #000000,
   "white":        #FFFFFF,
@@ -358,6 +366,8 @@ $colors: (
   "brown": $brown,
   "blue-grey": $blue-grey,
   "grey": $grey,
+  "brand-primary": $brand-primary,
+  "brand-invert": $brand-invert,
   "shades": $shades
 );
 
@@ -409,4 +419,3 @@ $colors: (
   @warn "Unknown `#{name}` in $colors.";
   @return null;
 }
-

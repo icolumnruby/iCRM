@@ -19,9 +19,8 @@
 
     <!-- Custom Fonts -->
     <link href="{{ URL::asset('css/font-awesome.min.css') }}" rel="stylesheet">
-    <link href="{{ URL::asset('css/custom.css') }}" rel="stylesheet">
     <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 
     <script type="text/javascript" src="{{ URL::asset('js/jquery.min.js') }}"></script>
 

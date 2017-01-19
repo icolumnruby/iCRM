@@ -6,6 +6,15 @@ Route::group(
         Route::get('/company/create-pass', 'CompanyController@createPassSlotTemplate');
         Route::post('/company/save-pass-template', 'CompanyController@savePassSlotTemplate');
         Route::resource('company', 'CompanyController');
+
+        //setup routes
+        Route::get('/setup', 'SetupController@index');
+        Route::get('/setup/program', 'SetupController@chooseProgram');
+        Route::get('/setup/pass-template', 'SetupController@setTemplate');
+        Route::get('/setup/pass-branding', 'SetupController@setTemplateImages');
+        // Route::post('/setup/program', 'SetupController@chooseProgram');
+        // Route::get('/setup/program', 'SetupController@setTemplate');
+
     }
 );
 
@@ -86,9 +95,6 @@ Route::group(['middlewareGroups' => ['web']],
         Route::get('/password/reset/{token?}','AdminAuth\PasswordController@showResetForm');
 
         Route::get('/admin', 'AdminController@index');
-
-        //setup routes
-        Route::get('/setup', 'SetupController@index');
 
     //    DELETE THIS
         Route::get('/admin/create-permission', 'AdminController@createPermission');

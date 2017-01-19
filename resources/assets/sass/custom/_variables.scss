@@ -96,6 +96,8 @@ $card-padding: 1.25rem !default;
 $card-bg-color: #fff !default;
 $card-link-color: color("orange", "accent-2") !default;
 $card-link-color-light: lighten($card-link-color, 20%) !default;
+$card-title-fontsize: 1.3rem;
+$card-border-radius: 1rem;
 
 
 // 5. Collapsible
@@ -277,6 +279,12 @@ $toast-text-color: #fff !default;
 // ==========================================================================
 
 $off-black: rgba(0, 0, 0, 0.87) !default;
+// Font Sizes
+$root-fontsize: 14px;
+$base-fontsize-s: 14px;
+$base-fontsize-m: 14.5px;
+$base-fontsize-l: 15px;
+
 // Header Styles
 $h1-fontsize: 4.2rem !default;
 $h2-fontsize: 3.56rem !default;
@@ -326,9 +334,11 @@ $section-padding-horizontal: 1rem;
 // ==========================================================================
 
 // Brand colors
-$brand-bg-color: #ff6f00;
-$brand-bg-highlight: #dce775;
-$brand-logo-color: darken($brand-bg-color, 20%);
+$brand-bg-color: color("brand-primary", "base");
+$brand-bg-highlight: adjust-hue($brand-bg-color, -30%);
+$brand-invert-bg-color: color("brand-invert", "base");
+$brand-invert-bg-highlight: adjust-hue($brand-invert-bg-color, -30%);
+$brand-logo-color: lighten($brand-bg-color, 80%);
 
 // Dark theme
 $theme-bg-dark: #263238;
@@ -337,3 +347,11 @@ $theme-color-dark: #f5f5f5;
 // Grey theme
 $theme-bg-grey: #f5f5f5;
 $theme-color-grey: #212121;
+
+// 26. Margins
+// ==========================================================================
+
+$margin-base: 1rem;
+$margin-half: $margin-base/2;
+$margin-double: $margin-base*2;
+$margin-one-half: $margin-base*1.5;
