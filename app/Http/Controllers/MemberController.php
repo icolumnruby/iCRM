@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Branch;
 use App\Models\Country;
+use App\Models\Company;
 use App\Models\Nationality;
 use App\Models\MemberPoints;
 use App\Models\MemberPointsTxn;

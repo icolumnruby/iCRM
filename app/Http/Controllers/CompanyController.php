@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 use App\Classes\PassSlotClass;
 use App\Classes\PassSlotApiException;
 use App\Models\Company;
+use App\Models\CompanyPassslot;
 use App\Models\Country;
 use Illuminate\Http\Request;
 use Session;
 use Auth;
+use Input;
 
 class CompanyController extends Controller
 {
@@ -178,6 +180,7 @@ class CompanyController extends Controller
             'companyId' => 'required',
             'name' => 'required',
         ]);
+        $responseArr = [];
 
         if ($v && $v->fails()) {
             return redirect()->back()->withInput($request->all())->withErrors($v->errors());
@@ -226,16 +229,24 @@ class CompanyController extends Controller
                 );
 
                 $response = $engine->createTemplate('POST', $data);
-                $responseArr = json_decode($response);
+                $responseArr = json_decode($response, true);
 
                 if (isset($responseArr['id'])) {
-                    $company = Company::findOrFail($request->get('companyId'));
 
-                    $company->passslot_template_id = $responseArr['id'];
-                    $company->last_updated_by = $loggedIn->id;
-                    $company->save();
+                    $passTemplate = new CompanyPassslot;
+                    $passTemplate->company_id = $request->get('companyId');
+                    $passTemplate->passslot_id = $responseArr['id'];
+                    $passTemplate->name = $responseArr['name'];
+                    $passTemplate->pass_type = $responseArr['passType'];
+                    $passTemplate->created_by = $loggedIn->id;
+                    $passTemplate->last_updated_by = $loggedIn->id;
+                    $passTemplate->foreground_colour = $request->get('foregroundColor');
+                    $passTemplate->background_colour = $request->get('backgroundColor');
+
+                    $passTemplate->save();
 
                     Session::flash('flash_message', "PassSlot Template was created successfully.");
+
                 } else {
                     Session::flash('error_message', "Error saving template. Please try again!");
                 }
@@ -244,8 +255,62 @@ class CompanyController extends Controller
                 return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
             }
 
-            return $this->createPassSlotTemplate();
+            return redirect('/setup/pass-template/'. $responseArr['id']);
         }
 
+    }
+
+    public function savePassSlotImages(Request $request)
+    {
+        // dd($request);
+        $loggedIn = Auth::user();
+        $v = $this->validate($request, [
+            'passTemplateId' => 'required',
+            'imageType' => 'required',
+        ]);
+        $responseArr = [];
+
+        if ($v && $v->fails()) {
+            return redirect()->back()->withInput($request->all())->withErrors($v->errors());
+        } else {
+          $appKey = env('PASSSLOT_KEY');
+          $passTemplateId = $request->get('passTemplateId');
+
+          try {
+              $engine = PassSlotClass::start($appKey);
+              $templateId = $passTemplateId;
+              $imageType = $request->get('imageType');
+              $imageResolution = 'high';
+              $image = $request->file('image');
+
+              // dd($image);
+              $response = $engine->saveTemplateImage($templateId, $imageType, $imageResolution, $image);
+              $responseArr = json_decode($response, true);
+
+              // dd($responseArr);
+
+              if (isset($responseArr['urls'])) {
+                  $passTemplate = CompanyPassslot::find($request->get('passTemplateId'));
+                  if ($responseArr['type'] == 'logo') {
+                    $passTemplate->logo_url = $responseArr['urls']['high'];
+                  } else {
+                    $passTemplate->strip_url = $responseArr['urls']['high'];
+                  }
+                  $passTemplate->save();
+
+                  Session::flash('flash_message', "Pass template images uploaded successfully.");
+
+              } else {
+                  Session::flash('error_message', "Error saving template. Please try again!");
+              }
+          } catch (PassSlotApiException $e) {
+              Session::flash('error_message', "Error saving template. Please try again!");
+              return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
+          }
+
+          // return redirect()->back()->withInput($request->all())->withErrors(['msg', $request]);
+          Session::flash('flash_message', "Pass template images uploaded successfully.");
+
+        }
     }
 }

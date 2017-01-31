@@ -5,13 +5,14 @@ Route::group(
     function () {
         Route::get('/company/create-pass', 'CompanyController@createPassSlotTemplate');
         Route::post('/company/save-pass-template', 'CompanyController@savePassSlotTemplate');
+        Route::post('/company/save-pass-images', 'CompanyController@savePassSlotImages');
         Route::resource('company', 'CompanyController');
 
         //setup routes
         Route::get('/setup', 'SetupController@index');
         Route::get('/setup/program', 'SetupController@chooseProgram');
         Route::get('/setup/pass-template', 'SetupController@setTemplate');
-        Route::get('/setup/pass-branding', 'SetupController@setTemplateImages');
+        Route::get('/setup/pass-template/{templateId?}', 'SetupController@setTemplateImages');
         // Route::post('/setup/program', 'SetupController@chooseProgram');
         // Route::get('/setup/program', 'SetupController@setTemplate');
 

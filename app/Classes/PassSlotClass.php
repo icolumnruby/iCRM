@@ -729,10 +729,13 @@ class PassSlotClass
             throw new PassSlotApiException("Please check your PHP / libcurl version and ensure that the latest security protocols are supported ($error_message)", $error_code);
         }
         $contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); //Added by Luq
         curl_close($ch);
 
         $responseJson = json_decode($response);
-        $httpCode = isset($responseJson->code) ? $responseJson->code : '';
+        // dd($response);
+        // $httpCode = isset($responseJson->code) ? $responseJson->code : '';
+        // dd($httpCode);
 
         if ($httpCode == 422) {
             // Validation Error
@@ -748,8 +751,10 @@ class PassSlotClass
         }
 
         if (strpos($contentType, "application/json") === 0) {
-            $json = json_decode($response);
-            return $json;
+            // $json = json_decode($response);
+            // return $json;
+            //return as a string instead of object
+            return $response;
         }
 
         return $response;
@@ -776,6 +781,8 @@ class PassSlotClass
     }
 
     /**
+     * Edited by Luq
+     *
      * Adds an image to the content object if validation is sucessful
      * @param string $image Path to image
      * @param string $imageType
@@ -794,9 +801,10 @@ class PassSlotClass
             user_error('No such image  ' . $image . '. Image will be ignored', E_USER_WARNING);
             return false;
         }
-
-        $mimeType = mime_content_type($image);
-        if ($mimeType != 'image/png' && $mimeType != 'image/jpg' && $mimeType != 'image/gif') {
+        // dd($image);
+        // $mimeType = mime_content_type($image);
+        $mimeType = $image->getMimeType();
+        if ($mimeType != 'image/png' && $mimeType != 'image/jpeg' && $mimeType != 'image/gif') {
             user_error('Image mime type ' . $mimeType . ' not supported. Image will be ignored', E_USER_WARNING);
             return false;
         }

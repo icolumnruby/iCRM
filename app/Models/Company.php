@@ -31,4 +31,12 @@ class Company extends Model
     {
         return $this->hasMany('App\Models\Branch');
     }
+
+    /**
+     * Get the pass templates.
+     */
+    public function templates()
+    {
+        return $this->hasMany('App\Models\CompanyPassslot');
+    }
 }

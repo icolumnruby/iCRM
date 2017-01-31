@@ -20,7 +20,7 @@
 
         <!-- Icons -->
         <link href="{{ URL::asset('css/font-awesome.min.css') }}" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="{{ URL::asset('css/material-icons.css') }}" rel="stylesheet">
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
 
@@ -59,6 +59,9 @@
                 </ul>
             </div>
         @endif
+        @if($errors->any())
+<h4>{{$errors->first()}}</h4>
+@endif
          <!-- Page Content -->
         <div id="page-wrapper" class="container">
             @yield('content')
@@ -68,6 +71,7 @@
         <!-- Materialize JavaScript -->
         <script src="{{ URL::asset('js/materialize.min.js') }}"></script>
         <script src="{{ URL::asset('js/materialize-colorpicker.min.js') }}"></script>
+        <script src="{{ URL::asset('js/dropzone.js') }}"></script>
 
         <!-- Bootstrap Core JavaScript -->
         <script type="text/javascript" src="{{ URL::asset('js/bootstrap-switch.min.js') }}"></script>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Models\Company;
+use App\Models\CompanyPassslot;
 use Kodeine\Acl\Models\Eloquent\Permission;
 use Kodeine\Acl\Models\Eloquent\Role;
 use Auth;
@@ -34,9 +35,13 @@ class SetupController extends Controller
     return view('setup.pass-template', compact('loggedIn'));
   }
 
-  public function setTemplateImages(){
+  public function setTemplateImages($id){
     $loggedIn = Auth::user();
+    $passTemplate = CompanyPassslot::where([
+        ['company_passslot.passslot_id', $id],
+    ])
+    ->first();
 
-    return view('setup.pass-template-images', compact('loggedIn'));
+    return view('setup.pass-template-images', compact('loggedIn', 'passTemplate'));
   }
 }
