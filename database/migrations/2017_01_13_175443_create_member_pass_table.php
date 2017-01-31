@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCompanyPassslotTable extends Migration
+class CreateMemberPassTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,13 @@ class CreateCompanyPassslotTable extends Migration
      */
     public function up()
     {
-        Schema::create('company_passslot', function (Blueprint $table) {
+        Schema::create('member_pass', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('name');
-            $table->integer('company_id');
-            $table->integer('passslot_id');
-            $table->string('pass_type');
+            $table->integer('member_id');
+            $table->string('pass_serial_number');
+            $table->string('pass_type_id');
+            $table->string('pass_url');
 
             $table->bigInteger('created_by');
             $table->bigInteger('last_updated_by');
@@ -35,6 +35,6 @@ class CreateCompanyPassslotTable extends Migration
      */
     public function down()
     {
-        Schema::drop('company_passslot');
+        Schema::drop('member_pass');
     }
 }

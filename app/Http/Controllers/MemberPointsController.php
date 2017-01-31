@@ -75,6 +75,22 @@ class MemberPointsController extends Controller
             $memberPointsTxn->created_by = $logged_in->id;
             $memberPointsTxn->last_updated_by = $logged_in->id;
 
+            //update member's pass
+            $appKey = env('PASSSLOT_KEY');
+            try {
+                $engine = PassSlotClass::start($appKey);
+                $pass = new \stdClass();
+                $pass->passTypeIdentifier = $member->pass_type_id;
+                $pass->serialNumber = $member->pass_serial_number;
+                $placeholderName = "memberPoints";
+                $value = $memberPoints->points_balance;
+                $response = $engine->updatePassValue($pass, $placeholderName, $value);
+//TODO check the response
+            } catch (PassSlotApiException $e) {
+                Session::flash('error_message', "Error updating pass. Please try again!");
+                return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
+            }
+
             $memberPointsTxn->save();
             Session::flash('flash_message', $status);
         } else {

@@ -19,7 +19,7 @@ class CreateMembersTable extends Migration
             $table->string('firstname');
             $table->string('middlename');
             $table->string('lastname');
-            $table->string('nric')->unique();
+            $table->string('nric');
             $table->boolean('gender');
             $table->string('mobile_country_code');
             $table->string('mobile');

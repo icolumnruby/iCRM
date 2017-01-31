@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use Kodeine\Acl\Models\Eloquent\Permission;
 use Kodeine\Acl\Models\Eloquent\Role;
 use Auth;
+use Validator;
 
 class AdminController extends Controller
 {
@@ -36,6 +37,111 @@ class AdminController extends Controller
                 ->count();
 
         return view('admin.dashboard', compact('members'));
+    }
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:6|confirmed',
+                'mobile' => 'required',
+//                'g-recaptcha-response'  => 'required'
+            ]);
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function registerMechant(Request $request)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                    ->withErrors($validator->errors())
+                    ->withInput($request->all());
+        }
+        if($this->captchaCheck() == false)
+        {
+//            return redirect()->back()
+//                ->withErrors(['Wrong Captcha'])
+//                ->withInput();
+        }
+
+        $this->saveMerchant($request->all());
+//        Auth::guard($this->getGuard())->login($this->create($request->all()));
+
+//        return redirect($this->redirectPath());
+        Session::flash('flash_message', "Application has been submitted and is subject for approval!");
+        return redirect()->back()
+                ->with('registered', true);
+
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    protected function saveMerchant(array $data)
+    {
+        $company = new Company;
+
+        $company->mobile = $data['mobile'];
+        $company->country_id = $data['country_id'];
+
+        $company->save();
+
+        //save the new user
+        $user = new User;
+
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = bcrypt($data['password']);
+        $user->is_active = 'N';
+        $user->company_id = $company->id;
+        $user->type = 1;                    //merchant/company admin
+
+        $user->save();
+
+        $this->notifyMerchant($user);   //send email to merchant
+        $this->notifyAdmin(merge($user, $company)); //send email to admin
+
+        return true;
+    }
+
+    /**
+     * Send an email to Merchant that their registration is received and needs admin approval
+     */
+    public function notifyMerchant($user)
+    {
+        Mail::send('admin.emails.notify-merchant', ['user' => $user], function ($m) use ($user) {
+            $m->from('info@icolumn.com', 'iColumn CRM');
+
+            $m->to($user->email, $user->name)->subject('Application received!');
+        });
+    }
+
+    /**
+     * Send an email notifiation to Admin for new merchant sign up
+     */
+    public function notifyAdmin($user)
+    {
+        Mail::send('admin.emails.notify-admin', ['user' => $user], function ($m) use ($user) {
+            $m->from($user->email, $user->name);
+
+            $m->to('ruby@icolumn.com', 'Admin')->subject('New Merchant Application!');
+        });
     }
 
     public function createPermission()
@@ -149,5 +255,39 @@ class AdminController extends Controller
         $user = \App\Models\User::find(1);  //admini
         // by object
         $user->assignRole('administrator');
+    }
+
+    public function createDB()
+    {
+        $this->middleware('web');
+
+        $dbhost = env('DB_HOST');
+        $dbport = env('DB_PORT');
+        $dbuser = env('DB_USERNAME');
+        $dbpass = env('DB_PASSWORD');
+        $link = mysqli_connect($dbhost, $dbuser, $dbpass);
+
+        /* check connection */
+        if (mysqli_connect_errno()) {
+            printf("Connect failed: %s\n", mysqli_connect_error());
+            exit();
+        }
+
+        echo 'Connected successfully';
+
+        $sql = 'CREATE Database test_db';
+        $retval = mysqli_query( $link, $sql );
+
+        if(!$retval) {
+           die('Could not create database: ' . mysql_error());
+        }
+
+        echo "Database test_db created successfully\n";
+        mysqli_close($link);
+    }
+
+    public function viewMerchant()
+    {
+        return view('admin.merchant');
     }
 }

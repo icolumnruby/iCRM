@@ -40,6 +40,6 @@ class CreateGwpRuleTable extends Migration
      */
     public function down()
     {
-        Schema::drop('rewards_redemption');
+        Schema::drop('gwp_rule');
     }
 }

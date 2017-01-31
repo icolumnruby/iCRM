@@ -86,7 +86,7 @@ class CompanyController extends Controller
             $brand->created_by = $logged_in->id;
             $brand->last_updated_by = $logged_in->id;
 
-            // save new brand
+            // save new company
             $brand->save();
 
             Session::flash('flash_message', 'Company successfully added!');
@@ -193,34 +193,44 @@ class CompanyController extends Controller
                         "foregroundColor"=> $request->get('foregroundColor'),
                         "backgroundColor"=> $request->get('backgroundColor'),
                         "storeCard" => array(
+                            "headerFields"=> array(
+                                array(
+                                    "key"=> "memberType",
+                                    "label"=> "Member Type",
+                                    "value"=> "\${memberType}"
+                                )
+                            ),
                             "primaryFields"=> array(
                                 array(
                                     "key"=> "points",
-                                    "label"=> "points",
-                                    "value"=> "$(memberPoints)"
+                                    "label"=> "Points",
+                                    "value"=> "\${memberPoints}"
                                 )
                             ),
-                            "auxiliaryFields"=> array(
+                            "secondaryFields"=> array(
                                 array(
-                                    "key"=> "companyId",
-                                    "label"=> "Company ID",
-                                    "value"=> $request->get('companyId')
+                                    "key"=> "memberName",
+                                    "label"=> "Member Name",
+                                    "value"=> "\${firstName} \${lastName}"
+                                )
+                            ),
+                            "backFields"=> array(
+                                array(
+                                    "key"=> "validAt",
+                                    "label"=> "Valid At",
+                                    "value"=> $request->get('name')
                                 )
                             )
                         )
                     )
                 );
-
                 $response = $engine->createTemplate('POST', $data);
                 $responseArr = json_decode($response);
-
                 if (isset($responseArr['id'])) {
                     $company = Company::findOrFail($request->get('companyId'));
-
                     $company->passslot_template_id = $responseArr['id'];
                     $company->last_updated_by = $loggedIn->id;
                     $company->save();
-
                     Session::flash('flash_message', "PassSlot Template was created successfully.");
                 } else {
                     Session::flash('error_message', "Error saving template. Please try again!");
@@ -229,7 +239,6 @@ class CompanyController extends Controller
                 Session::flash('error_message', "Error saving template. Please try again!");
                 return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
             }
-
             return $this->createPassSlotTemplate();
         }
 

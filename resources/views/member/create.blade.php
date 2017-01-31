@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-lg-12">
 
-            <h2 class="page-header">Add Member <small>(Branch: {!! $branch->name !!})</small></h2>
+            <h2 class="page-header">Add Member <small>@if ($branch)(Branch: {!! $branch->name !!}) @endif</small></h2>
         @if(Session::has('flash_message'))
         <div class="alert alert-success">
             {!! Session::get('flash_message') !!}

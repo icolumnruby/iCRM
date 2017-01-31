@@ -92,8 +92,12 @@ Route::group(['middlewareGroups' => ['web']],
         Route::get('/admin/create-role', 'AdminController@createRole');
         Route::get('/admin/assign-role', 'AdminController@assignPermToRole');
         Route::get('/admin/assign-user-role', 'AdminController@assignUserRole');
+
+        Route::get('/admin/create-db', 'AdminController@createDB');  //just for testing
+        Route::get('/admin/merchant', 'AdminController@viewMerchant');  //just for testing
     }
 );
 
 Route::get('/', 'HomeController@index');
-//Route::get('/send-mail', 'HomeController@sendMail');  //just for testing
+//automating deployment
+Route::get('/deploy', 'ServerController@deploy');

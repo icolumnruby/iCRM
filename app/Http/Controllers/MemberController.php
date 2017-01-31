@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\Branch;
+use App\Models\Company;
+use App\Classes\PassSlotClass;
 use App\Models\Country;
 use App\Models\Nationality;
 use App\Models\MemberPoints;
@@ -191,6 +193,34 @@ class MemberController extends Controller {
                 $memberPointsTxn->save();
             }
 
+            //create pass for member from company's template ID
+            $appKey = env('PASSSLOT_KEY');
+            $company = Company::findOrFail($logged_in->company_id);
+            $passTemplateId = $company->passslot_template_id;
+            try {
+                $engine = PassSlotClass::start($appKey);
+                $data = array(
+                    "firstName"=>$request->get('firstname'),
+                    "lastName"=>$request->get('lastname'),
+                    "memberType"=>Member::$_memberType[$request->get('memberTypeId')],
+                    "memberPoints"=>MemberPoints::_getPoints($member_id)
+                    );
+                $response = $engine->createPassFromTemplate($passTemplateId, $data);
+                $responseArr = json_decode($response, true);
+                if (isset($responseArr['serialNumber'])) {
+                    $member = Member::findOrFail($member_id);
+                    $member->pass_serial_number = $responseArr['serialNumber'];
+                    $member->pass_type_id = $responseArr['passTypeIdentifier'];
+                    $member->pass_url = $responseArr['url'];
+                    $member->save();
+                    Session::flash('flash_message', "PassSlot Pass was created successfully.");
+                } else {
+                    Session::flash('error_message', "Error saving pass. Please try again!");
+                }
+            } catch (PassSlotApiException $e) {
+                Session::flash('error_message', "Error creating pass. Please try again!");
+                return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
+            }
             Session::flash('flash_message', "Member with ID $member_id was successfully added!");
 
             return redirect()->route('member.index');
