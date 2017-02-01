@@ -264,6 +264,10 @@ class BranchController extends Controller
 
         Session::flash('flash_message', "Branch Admin with ID " . $user->id . " successfully added!");
 
+        if($request->exists('setup')) {
+          return redirect('/setup/product-categories');
+        }
+
         return $this->showUsers($logged_in->company_id);
 
     }

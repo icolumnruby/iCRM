@@ -6,7 +6,7 @@
   <h4>Add your branch name and location</h4>
   <form method="POST" action="{!! route('branch.index') !!}" name="formPassTemplate" id="formPassTemplate" class="input-form">
     {!! csrf_field() !!}
-    <input type="hidden" name="company_id" value="{!! $loggedIn->company_id !!}" />
+    <input type="hidden" name="company_id" value="{!! $user->company_id !!}" />
     <input type="hidden" name="setup" value="yes" />
     <div class="input-field">
         <input type="text" name="name" id="name" required=""/>
@@ -21,7 +21,7 @@
         <div class="switch">
           <label>
             Inactive
-            <input type="checkbox">
+            <input type="checkbox" name="isActivated" id="isActivated" value="Y" checked="checked">
             <span class="lever"></span>
             Active
           </label>
@@ -33,6 +33,6 @@
       <button type="submit" class="btn brand-gradient">Next</button>
     </div>
   </form>
-  <p class="caption center-align">Next Step: Brand Your Membership</p>
+  <p class="caption center-align">Next Step: Add Managers</p>
 </div>
 @stop

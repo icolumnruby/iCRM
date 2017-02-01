@@ -7498,6 +7498,9 @@ textarea.materialize-textarea:focus.parsley-error {
   .parsley-errors-list ul li:first-child {
     margin-top: 0; }
 
+.switch {
+  margin: 1.5rem 0; }
+
 /***************
     Nav List
 ***************/

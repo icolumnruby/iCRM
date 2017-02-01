@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Models\Branch;
 use App\Models\Company;
 use App\Models\CompanyPassslot;
 use Kodeine\Acl\Models\Eloquent\Permission;
@@ -46,20 +47,27 @@ class SetupController extends Controller
   }
 
   public function setBranches(){
-    $loggedIn = Auth::user();
+    $user = Auth::user();
 
-    return view('setup.set-branches', compact('loggedIn'));
+    return view('setup.set-branches', compact('user'));
   }
 
   public function setManagers(){
-    $loggedIn = Auth::user();
+    $user = Auth::user();
+    $type = 2;
+    $branches = Branch::with('company')
+        ->where([
+                ['branch.deleted_at', NULL],
+                ['branch.company_id', $user->company_id]
+            ])
+        ->get();
 
-    return view('setup.set-managers', compact('loggedIn'));
+    return view('setup.set-managers', compact('user', 'branches', 'type'));
   }
 
   public function setProductCategories(){
-    $loggedIn = Auth::user();
+    $user = Auth::user();
 
-    return view('setup.set-product-categories', compact('loggedIn'));
+    return view('setup.set-product-categories', compact('user'));
   }
 }
