@@ -73,6 +73,7 @@ class BranchController extends Controller
     {
         $logged_in = Auth::user();
         //validate required fields
+
         $v = $this->validate($request, [
             'name' => 'required',
             'company_id' => 'required',
@@ -94,6 +95,10 @@ class BranchController extends Controller
             $branch->save();
 
             Session::flash('flash_message', 'Branch successfully added!');
+
+            if($request->exists('setup')) {
+              return redirect('/setup/managers');
+            }
 
             $branches = Branch::with('company')
             ->where([
@@ -280,4 +285,3 @@ class BranchController extends Controller
     }
 
 }
-

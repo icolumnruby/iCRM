@@ -1,17 +1,38 @@
 
 
-.alert {
-  position: arelative;
+.alert, .notice {
+  position: relative;
   width: 100%;
   padding: 1.5rem $gutter-width*2;
+  display: table;
 
   &.alert-success {
-    background-color: #4CAF50;
-    color: lighten(#64dd17, 50%);
+    background-color: color('green', 'base');
+    color: lighten(color('green', 'base'), 50%);
   }
 
   &.alert-error {
-    background-color: #F44336;
-    color: lighten(#F44336, 50%);
+    background-color: color('red', 'base');
+    color: lighten(color('red', 'base'), 50%);
+  }
+
+  &.alert-warning {
+    background-color: color('amber', 'base');
+    color: darken(color('amber', 'base'), 50%);
+  }
+  // Clear floating children
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  span {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: $gutter-width;
+  }
+  .btn {
+    display: inline-block;
+    vertical-align: middle;
   }
 }

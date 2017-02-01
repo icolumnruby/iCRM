@@ -25,7 +25,7 @@ class SetupController extends Controller
     return view('setup.index', compact('company'));
   }
 
-  public function chooseProgram(){
+  public function setProgram(){
     return view('setup.program');
   }
 
@@ -43,5 +43,23 @@ class SetupController extends Controller
     ->first();
 
     return view('setup.pass-template-images', compact('loggedIn', 'passTemplate'));
+  }
+
+  public function setBranches(){
+    $loggedIn = Auth::user();
+
+    return view('setup.set-branches', compact('loggedIn'));
+  }
+
+  public function setManagers(){
+    $loggedIn = Auth::user();
+
+    return view('setup.set-managers', compact('loggedIn'));
+  }
+
+  public function setProductCategories(){
+    $loggedIn = Auth::user();
+
+    return view('setup.set-product-categories', compact('loggedIn'));
   }
 }

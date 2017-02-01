@@ -59,9 +59,11 @@
                 </ul>
             </div>
         @endif
-        @if($errors->any())
-<h4>{{$errors->first()}}</h4>
-@endif
+        @if(session('has_setup') == false && (!(Request::is('setup/*') || Request::is('setup'))))
+          <div class="notice alert-warning">
+            <span>Looks like you haven't completed your setup. </span><a href="{{url('setup')}}" class="btn black-ghost">Return to setup</a>
+          </div>
+        @endif
          <!-- Page Content -->
         <div id="page-wrapper" class="container">
             @yield('content')

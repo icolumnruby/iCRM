@@ -383,6 +383,15 @@ $colors: (
       .#{$color_name}-text {
         color: $color_value !important;
       }
+      .#{$color_name}-ghost {
+        background: none !important;
+        border: 1px solid $color_value !important;
+        color: $color_value !important;
+        &.btn:hover, &.btn.active, &.btn:focus {
+          background: $color_value !important;
+          color: lighten($color_value, 80%) !important;
+        }
+      }
     }
     @else if $color_name != "shades" {
       .#{$color_name}.#{$color_type} {
@@ -390,6 +399,15 @@ $colors: (
       }
       .#{$color_name}-text.text-#{$color_type} {
         color: $color_value !important;
+      }
+      .#{$color_name}-ghost.ghost-#{$color_type} {
+        background: none !important;
+        border: 1px solid $color_value !important;
+        color: $color_value !important;
+        &.btn:hover, &.btn.active, &.btn:focus {
+          background: $color_value !important;
+          color: lighten($color_value, 80%) !important;
+        }
       }
     }
   }
@@ -402,6 +420,15 @@ $colors: (
   }
   .#{$color}-text {
     color: $color_value !important;
+  }
+  .#{$color}-ghost {
+    background: none !important;
+    border: 1px solid $color_value !important;
+    color: $color_value !important;
+    &.btn:hover, &.btn.active, &.btn:focus {
+      background: $color_value !important;
+      color: invert($color_value) !important;
+    }
   }
 }
 

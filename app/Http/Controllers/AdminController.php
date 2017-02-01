@@ -50,8 +50,12 @@ class AdminController extends Controller
         //         ->count();
 
         if ($company['setup']) {
+          // store has setup condition on session
+          session(['has_setup' => false]);
           return redirect('setup');
         }
+        // remove has setup condition on session
+        session(['has_setup' => true]);
 
         return view('admin.dashboard', compact('members'));
     }
