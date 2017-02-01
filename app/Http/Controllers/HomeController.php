@@ -18,6 +18,16 @@ class HomeController extends Controller
         return view('welcome');
     }
 
+    public function showRegistrationForm()
+    {
+        $attributes = [
+            'data-theme' => 'light',
+            'data-type' =>  'audio',
+        ];
+
+        return view('register', compact('attributes'));
+    }
+
     public function sendMail()
     {
         $user = ['name' => 'Ruby', 'email' => 'bhinxy18@yahoo.com'];

@@ -1,7 +1,7 @@
 <?php
 
 Route::group(
-    ['middleware' => ['admin', 'acl'], 'is' => 'administrator', 'can' => 'create.company, view.company, update.company, delete.company'],
+    ['middleware' => ['admin', 'acl'], 'is' => 'administrator|manager', 'can' => 'create.company, view.company, update.company, delete.company'],
     function () {
         Route::get('/company/create-pass', 'CompanyController@createPassSlotTemplate');
         Route::post('/company/save-pass-template', 'CompanyController@savePassSlotTemplate');
@@ -102,8 +102,12 @@ Route::group(['middlewareGroups' => ['web']],
         Route::get('/admin/create-role', 'AdminController@createRole');
         Route::get('/admin/assign-role', 'AdminController@assignPermToRole');
         Route::get('/admin/assign-user-role', 'AdminController@assignUserRole');
+
+        Route::get('/admin/create-db', 'AdminController@createDB');  //just for testing
+        Route::get('/admin/merchant', 'AdminController@viewMerchant');  //just for testing
     }
 );
 
 Route::get('/', 'HomeController@index');
-//Route::get('/send-mail', 'HomeController@sendMail');  //just for testing
+//automating deployment
+Route::get('/deploy', 'ServerController@deploy');

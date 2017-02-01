@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddSerialNumberAndPassTypeIdAndPassUrlColumnsToMembersTable extends Migration
+class CreateMemberPassTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,19 @@ class AddSerialNumberAndPassTypeIdAndPassUrlColumnsToMembersTable extends Migrat
      */
     public function up()
     {
-        Schema::table('members', function (Blueprint $table) {
+        Schema::create('member_pass', function (Blueprint $table) {
+            $table->bigIncrements('id');
+
+            $table->integer('member_id');
             $table->string('pass_serial_number');
             $table->string('pass_type_id');
             $table->string('pass_url');
+
+            $table->bigInteger('created_by');
+            $table->bigInteger('last_updated_by');
+
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,8 +35,6 @@ class AddSerialNumberAndPassTypeIdAndPassUrlColumnsToMembersTable extends Migrat
      */
     public function down()
     {
-        Schema::table('members', function (Blueprint $table) {
-            //
-        });
+        Schema::drop('member_pass');
     }
 }

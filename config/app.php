@@ -210,6 +210,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'SSH' => Collective\Remote\RemoteFacade::class,
 
     ],
 

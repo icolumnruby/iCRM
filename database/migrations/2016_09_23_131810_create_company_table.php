@@ -14,17 +14,16 @@ class CreateCompanyTable extends Migration
     {
         Schema::create('company', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('company_code');
-            $table->string('description')->nullable();
+            $table->string('brand_name');
+            $table->string('company')->nullable();
+            $table->string('fullname');
             $table->integer('mobile');
+            $table->string('email');
+            $table->string('comments')->nullable();
             $table->enum('is_active', ['Y', 'N'])->nullable()->default('N');
+            $table->enum('has_setup', ['Y', 'N'])->default('N');
             $table->string('address')->nullable();
-            $table->string('city')->nullable();
-            $table->string('state')->nullable();
             $table->integer('country_id');
-            $table->string('postal_code')->nullable();
-            $table->integer('passslot_template_id');
 
             $table->bigInteger('created_by');
             $table->bigInteger('last_updated_by')->nullable();

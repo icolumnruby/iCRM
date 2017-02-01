@@ -4,6 +4,8 @@ namespace App\Http\Controllers\AdminAuth;
 
 use App\Models\User;
 use App\Models\Company;
+use Kodeine\Acl\Models\Eloquent\Permission;
+use Kodeine\Acl\Models\Eloquent\Role;
 use Mail;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -53,16 +55,16 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-                'code' => 'required|max:255',
+                'brand' => 'required',
+                'fullname' => 'required',
                 'email' => 'required|email|max:255|unique:users',
-                'password' => 'required|min:6|confirmed',
                 'mobile' => 'required',
                 'g-recaptcha-response'  => 'required'
             ]);
     }
 
     /**
-     * Create a new user instance after a valid registration.
+     * Create a new merchant user instance after a valid registration.
      *
      * @param  array  $data
      * @return User
@@ -71,24 +73,37 @@ class AuthController extends Controller
     {
         $company = new Company;
 
-        $company->company_code = $data['code'];
+        $company->brand_name = $data['brand'];
+        $company->company = $data['company'];
+        $company->fullname = $data['fullname'];
+        $company->email = $data['email'];
         $company->mobile = $data['mobile'];
+        $company->address = $data['address'];
         $company->country_id = $data['country_id'];
+        $company->comments = $data['comments'];
+        $company->is_active = 'Y';
 
         $company->save();
 
         //save the new user
         $user = new User;
 
-        $user->name = $data['name'];
+        $user->name = $data['fullname'];
         $user->email = $data['email'];
-        $user->password = bcrypt($data['password']);
+        $user->password = bcrypt($data['email']);
         $user->is_active = 'N';
         $user->company_id = $company->id;
-        $user->type = 1;
+        $user->branch_id = 1;   //set 1 as the default branch
+        $user->type = 1;                    //merchant/company admin
 
         $user->save();
-//$this->notifyMerchant($user);
+
+        // assign merchant a branh manager role
+        $user->assignRole('manager');
+
+        $this->notifyMerchant($user);   //send email to merchant
+        $this->notifyAdmin($company); //send email to admin
+
         return true;
     }
 
@@ -113,7 +128,7 @@ class AuthController extends Controller
     {
         $countries = \App\Models\Country::all();
         $attributes = [
-            'data-theme' => 'dark',
+            'data-theme' => 'light',
             'data-type' =>  'audio',
         ];
 
@@ -121,14 +136,26 @@ class AuthController extends Controller
     }
 
     /**
-     * Send an email to Merchant that their registration needs admin approval
+     * Send an email to Merchant that their registration is received and needs admin approval
      */
     public function notifyMerchant($user)
     {
-        Mail::send('admin.emails.notify-admin', ['user' => $user], function ($m) use ($user) {
-            $m->from('ruby@icolumn.com', 'Your Application');
+        Mail::send('admin.emails.notify-merchant', ['user' => $user], function ($m) use ($user) {
+            $m->from('info@icolumn.com', 'iColumn CRM');
 
-            $m->to($user->email, $user->name)->subject('Your Reminder!');
+            $m->to($user->email, $user->name)->subject('Application received!');
+        });
+    }
+
+    /**
+     * Send an email notifiation to Admin for new merchant sign up
+     */
+    public function notifyAdmin($data)
+    {
+        Mail::send('admin.emails.notify-admin', ['user' => $data], function ($m) use ($data) {
+            $m->from($data->email, $data->fullname);
+
+            $m->to('ruby@icolumn.com', 'Admin')->subject('New Merchant Application!');
         });
     }
 }

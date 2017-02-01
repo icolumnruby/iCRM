@@ -18,7 +18,11 @@ class CreateCompanyPassslotTable extends Migration
             $table->integer('company_id');
             $table->integer('passslot_id');
             $table->string('name');
-            $table->string('pass_ type');
+            $table->string('pass_type');
+            $table->string('foreground_colour');
+            $table->string('background_colour');
+            $table->string('logo_url');
+            $table->string('strip_url');
 
             $table->bigInteger('created_by');
             $table->bigInteger('last_updated_by');

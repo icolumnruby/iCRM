@@ -14,7 +14,8 @@
         "guzzlehttp/guzzle": "~5.3|~6.0",
         "buzz/laravel-google-captcha": "1.*",
         "maatwebsite/excel": "~2.1.0",
-        "simplesoftwareio/simple-qrcode": "~1"
+        "simplesoftwareio/simple-qrcode": "~1",
+        "laravelcollective/remote": "^5.2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
