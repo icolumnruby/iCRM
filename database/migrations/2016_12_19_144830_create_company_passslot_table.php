@@ -15,10 +15,14 @@ class CreateCompanyPassslotTable extends Migration
         Schema::create('company_passslot', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('name');
             $table->integer('company_id');
             $table->integer('passslot_id');
+            $table->string('name');
             $table->string('pass_type');
+            $table->string('foreground_colour');
+            $table->string('background_colour');
+            $table->string('logo_url');
+            $table->string('strip_url');
 
             $table->bigInteger('created_by');
             $table->bigInteger('last_updated_by');

@@ -1,0 +1,47 @@
+nav {
+  background-color: white;
+  @extend .z-depth-0;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+
+  .nav-search {
+    width: 50%;
+    min-width: 300px;
+  }
+
+  // Navbar Search Form
+  form {
+    height: 100%;
+  }
+
+  .input-field {
+    margin: 0;
+    height: 100%;
+
+    input {
+      height: 100%;
+      font-size: 1.2rem;
+      border: none;
+      padding-left: 2rem;
+
+      &:focus, &[type=text]:valid, &[type=password]:valid,
+      &[type=email]:valid, &[type=url]:valid, &[type=date]:valid {
+        border: none;
+        box-shadow: none;
+      }
+    }
+
+    label {
+      top: 0;
+      left: 0;
+
+      i {
+        color: rgba(0,0,0,.7);
+        transition: color .3s;
+      }
+      &.active i { color: $navbar-font-color; }
+      &.active {
+        transform: translateY(0);
+      }
+    }
+  }
+}

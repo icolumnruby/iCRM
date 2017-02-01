@@ -1,0 +1,33 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 700;
+	line-height: 1.5;
+
+  & + form, .input-field {
+    margin-top: $margin-double;
+  }
+
+  &.skinny {
+    font-weight: 300;
+   }
+
+   &.regular {
+     font-weight: 400;
+    }
+}
+
+.headline {
+  font-size: $h5-fontsize;
+  margin-bottom: 0;
+  & + h4 {
+    margin-top: $h4-fontsize/4;
+  }
+}
+
+.caption {
+  font-size: 0.8rem;
+  color: lighten($off-black, 50%);
+}

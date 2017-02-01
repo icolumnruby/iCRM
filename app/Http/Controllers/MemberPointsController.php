@@ -7,6 +7,8 @@ use App\Models\Member;
 use App\Models\MemberPoints;
 use App\Models\MemberPointsTxn;
 use App\Models\LoyaltyConfig;
+use App\Classes\PassSlotClass;
+use App\Classes\PassSlotApiException;
 use Session;
 use Auth;
 use Validator;
@@ -77,6 +79,7 @@ class MemberPointsController extends Controller
 
             //update member's pass
             $appKey = env('PASSSLOT_KEY');
+
             try {
                 $engine = PassSlotClass::start($appKey);
                 $pass = new \stdClass();
@@ -85,11 +88,11 @@ class MemberPointsController extends Controller
                 $placeholderName = "memberPoints";
                 $value = $memberPoints->points_balance;
                 $response = $engine->updatePassValue($pass, $placeholderName, $value);
-//TODO check the response
-            } catch (PassSlotApiException $e) {
+
+              } catch (PassSlotApiException $e) {
                 Session::flash('error_message', "Error updating pass. Please try again!");
                 return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
-            }
+              }
 
             $memberPointsTxn->save();
             Session::flash('flash_message', $status);

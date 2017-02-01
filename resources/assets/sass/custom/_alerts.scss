@@ -1,0 +1,17 @@
+
+
+.alert {
+  position: arelative;
+  width: 100%;
+  padding: 1.5rem $gutter-width*2;
+
+  &.alert-success {
+    background-color: #4CAF50;
+    color: lighten(#64dd17, 50%);
+  }
+
+  &.alert-error {
+    background-color: #F44336;
+    color: lighten(#F44336, 50%);
+  }
+}

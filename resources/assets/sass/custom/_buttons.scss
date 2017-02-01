@@ -1,0 +1,38 @@
+// Don't give them buttons a raise
+.btn {
+  @extend .z-depth-0;
+
+  &:hover {
+    @extend .z-depth-1-half;
+  }
+}
+
+.btn-form {
+  border: $button-border;
+  border-radius: $button-radius;
+  display: inline-block;
+  height: $button-height;
+  line-height: $button-height;
+  padding: $button-padding;
+  text-transform: uppercase;
+  vertical-align: middle;
+  // Gets rid of tap active state
+  -webkit-tap-highlight-color: transparent;
+
+  box-shadow: none;
+  background-color: transparent;
+  color: $button-flat-color;
+  cursor: pointer;
+  transition: background-color .2s;
+
+  &:focus {
+    background-color: transparent;
+  }
+}
+
+.btn-xs {
+  font-size: $button-xs-font-size;
+  height: $button-xs-height;
+  line-height: $button-xs-height;
+  padding: $button-xs-padding;
+}

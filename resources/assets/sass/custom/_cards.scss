@@ -1,0 +1,33 @@
+.select-cards {
+  margin-top: $margin-double;
+
+  input[type=checkbox]{
+    display: none;
+    & + label {
+      height: inherit;
+      padding-left: 0;
+      &:before, &:after {
+        display: none;
+        height: 0;
+      }
+    }
+
+    &:checked + .card {
+        color: $brand-bg-color;
+        border: 4px solid $brand-bg-color;
+
+        .card-title {
+        }
+    }
+  }
+  .card {
+    .card-title {
+      font-size: $card-title-fontsize;
+      line-height: 1.5;
+      margin-top: 0;
+    }
+    p {
+      margin-top: $margin-base;
+    }
+  }
+}

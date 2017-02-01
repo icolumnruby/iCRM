@@ -21,9 +21,9 @@ class CreateCompanyTable extends Migration
             $table->string('email');
             $table->string('comments')->nullable();
             $table->enum('is_active', ['Y', 'N'])->nullable()->default('N');
+            $table->enum('has_setup', ['Y', 'N'])->default('N');
             $table->string('address')->nullable();
             $table->integer('country_id');
-            $table->integer('passslot_template_id');
 
             $table->bigInteger('created_by');
             $table->bigInteger('last_updated_by')->nullable();

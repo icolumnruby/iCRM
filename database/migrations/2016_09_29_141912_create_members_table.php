@@ -36,6 +36,9 @@ class CreateMembersTable extends Migration
             $table->integer('company_id');
             $table->enum('email_subscribe', ['Y', 'N'])->default('N');
             $table->enum('sms_subscribe', ['Y', 'N'])->default('N');
+            $table->string('pass_serial_number');
+            $table->string('pass_type_id');
+            $table->string('pass_url');
 
             $table->bigInteger('created_by');
             $table->bigInteger('last_updated_by');

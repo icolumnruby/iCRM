@@ -1,0 +1,153 @@
+.pass-template {
+  width: 375px;
+  background-color: color('brand-primary', 'base');
+  border-radius: 1rem;
+  margin: 0 auto;
+  margin-bottom: $margin-double;
+  font-family: "Helvetica Neue", sans-serif;
+  font-weight: 300;
+  font-size: 1.2rem;
+  color: white;
+  text-align: left;
+  @extend .z-depth-1;
+
+  .pass-value {
+    margin: 0;
+    line-height: 1;
+    &.skinny {
+      font-weight: 100;
+    }
+  }
+
+  .pass-label {
+    margin: 0;
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.4);
+    font-weight: 400;
+  }
+
+  .pass-header-section, .pass-secondary-section, .pass-barcode-section {
+    padding: 5px 10px;
+    position: relative;
+  }
+  .image-drop {
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    position: relative;
+    .dz-preview {
+      margin: 0;
+      min-height: 20px;
+
+      &.dz-image-preview {
+        background: none;
+      }
+
+      .dz-error-message {
+        width: auto;
+      }
+    }
+  }
+  .pass-header-section {
+    height: 60px;
+    .image-drop {
+      width: 160px;
+      .dz-preview {
+        .dz-image {
+          width: 160px;
+          height: 50px;
+          border-radius: 0;
+          img {
+            width: 100%;
+            height: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+          }
+        }
+        .dz-error-message {
+          top: 60px;
+        }
+      }
+    }
+    .pass-inner {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      padding: 5px 0;
+    }
+  }
+  .pass-strip-section {
+    height: 123px;
+    position: relative;
+    .image-drop {
+        .dz-preview {
+          .dz-image {
+            width: 375px;
+            height: 123px;
+            border-radius: 0;
+            img {
+              width: 100%;
+              height: auto;
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+            }
+          }
+          .dz-error-message {
+            top: 133px;
+          }
+        }
+    }
+    .pass-inner {
+      position: absolute;
+      top: 5px;
+      left: 10px;
+      height: 113px;
+      z-index: 100;
+      .pass-value {
+        margin-top: 1rem;
+      }
+      .pass-label {
+        font-size: 1rem;
+        color: white;
+        font-weight: 300;
+      }
+    }
+  }
+  .pass-secondary-section {
+    height: 140px;
+    padding: 10px;
+  }
+  .pass-barcode-section {
+    padding-bottom: 38px;
+    .barcode-box {
+      width: 254px;
+      height: 93px;
+      border-radius: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.2);
+      margin: 0 auto;
+      color: rgba(0, 0, 0, 0.3);
+      line-height: 93px;
+    }
+  }
+}
+
+.dropzone {
+  min-height: 20px;
+  padding: 0;
+  .dz-message {
+    margin: 0;
+    display: block;
+    text-align: center;
+    width: 100%;
+    color: rgba(0, 0, 0, 0.3);
+    font-weight: 400;
+    font-size: 1rem;
+  }
+}

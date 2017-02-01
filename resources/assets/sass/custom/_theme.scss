@@ -1,0 +1,117 @@
+// Themeing for Side Nav
+
+.side-nav, .side-nav.fixed {
+  @include gradient($sidenav-bg-color, 315, $brand-bg-color, 0, 0.1);
+
+  li.header > a {
+    background-color: $brand-bg-color;
+    @include gradient($brand-bg-color, 315, $brand-bg-highlight, 0, 0.2);
+    color: $brand-logo-color;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  li.active {
+    background-color: $sidenav-active-color;
+     a {
+       color: rgba(255,255,255,.90);
+       i {
+         color: rgba(255,255,255,.90);
+       }
+     }
+  }
+
+  .collapsible-body {
+    background-color: $sidenav-active-color;
+  }
+
+}
+
+// Theme gradients
+
+.brand-gradient {
+    @include gradient($brand-bg-color, 315, $brand-bg-highlight, 0, 0.2);
+    &.btn {
+      &:hover, &.active {
+        @include gradient(adjust-hue($brand-invert-bg-color, 10%), 315, $brand-invert-bg-highlight, 0, 0.2);
+      }
+    }
+}
+
+// Theme Buttons
+
+.btn {
+  &.brand-ghost {
+    background: none;
+    border: 1px solid $brand-invert-bg-color;
+    color: $brand-invert-bg-color;
+    &:hover, &.active {
+      @include gradient(adjust-hue($brand-invert-bg-color, 10%), 315, $brand-invert-bg-highlight, 0, 0.2);
+      color: $button-raised-color;
+    }
+  }
+}
+
+// Brand themes
+
+.dark {
+  background-color: $theme-bg-dark;
+  color: $theme-color-dark;
+
+  a {
+    color: $theme-color-dark;
+    &:hover {
+      color: lighten($theme-color-dark, 20%);
+    }
+  }
+
+  ul {
+    a {
+      color: $theme-color-dark;
+      &:hover {
+        color: lighten($theme-color-dark, 20%);
+      }
+    }
+  }
+
+  .dropdown-content {
+    background-color: $theme-bg-dark;
+  }
+}
+
+.theme-grey {
+  background-color: $theme-bg-grey;
+  color: $theme-color-grey;
+
+  a {
+    color: $theme-color-grey;
+    &:hover {
+      color: lighten($theme-color-grey, 20%);
+    }
+  }
+
+  ul {
+    a {
+      color: $theme-color-grey;
+      &:hover {
+        color: lighten($theme-color-grey, 20%);
+      }
+    }
+  }
+
+  .btn {
+    color: $button-raised-color;
+    &:hover {
+      color: $button-raised-color;
+    }
+  }
+  .btn-flat {
+    color: $button-flat-color;
+    &:hover {
+      color: $button-flat-color;
+    }
+  }
+
+  .dropdown-content {
+    background-color: $theme-bg-grey;
+  }
+}
