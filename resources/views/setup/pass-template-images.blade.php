@@ -44,21 +44,7 @@
   <div class="row">
     <div class="col s12">
       <a href="{{url('setup')}}" class="btn brand-ghost">Back</a>
-      <form method="POST" action="{!! url('company/save-pass-images') !!}" enctype="multipart/form-data">
-        {!! csrf_field() !!}
-        <input type="hidden" name="imageType" value="strip">
-        <input type="hidden" name="passTemplateId" value="{!! $passTemplate->passslot_id !!}">
-         <div class="file-field input-field">
-           <div class="btn">
-             <span>File</span>
-             <input name="image" type="file">
-           </div>
-           <div class="file-path-wrapper">
-             <input class="file-path validate" type="text">
-           </div>
-         </div>
-        <button type="submit" class="btn brand-gradient">Next</button>
-      </form>
+      <a class="btn brand-gradient">Next</a>
     </div>
   </div>
   <p class="caption">Next Step: Add Branches</p>

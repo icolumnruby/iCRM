@@ -12,10 +12,6 @@
         <label for="name">Template Name</label>
     </div>
     <div class="input-field">
-        <input type="text" name="logoText" id="logoText" placeholder="" required=""/>
-        <label for="logoText">Brand Name</label>
-    </div>
-    <div class="input-field">
         <textarea name="description" id="description" placeholder="" rows="2" class="materialize-textarea"></textarea>
         <label for="description">Description</label>
     </div>

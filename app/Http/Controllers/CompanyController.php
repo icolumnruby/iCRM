@@ -192,7 +192,6 @@ class CompanyController extends Controller
                 $data = array("name"=> $request->get('name'),
                     "passType"=> "pass.slot.storecard",
                     "description"=> array(
-                        "logoText"=> $request->get('logoText'),
                         "foregroundColor"=> $request->get('foregroundColor'),
                         "backgroundColor"=> $request->get('backgroundColor'),
                         "storeCard" => array(
