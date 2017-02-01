@@ -19,7 +19,7 @@
       <div class="switch">
         <label>
           Inactive
-          <input type="checkbox">
+          <input type="checkbox" name="isActivated" id="isActivated" value="Y" checked="checked">
           <span class="lever"></span>
           Active
         </label>
