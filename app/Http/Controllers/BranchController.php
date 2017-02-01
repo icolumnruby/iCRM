@@ -94,11 +94,11 @@ class BranchController extends Controller
             // save new branch
             $branch->save();
 
-            Session::flash('flash_message', 'Branch successfully added!');
-
             if($request->exists('setup')) {
-              return redirect('/setup/managers');
-            }
+              return response()->json(['name' => $request->get('name'), 'address' => $request->get('address')]);
+            };
+
+            Session::flash('flash_message', 'Branch successfully added!');
 
             $branches = Branch::with('company')
             ->where([
@@ -262,11 +262,11 @@ class BranchController extends Controller
             $userRole->save();
         }
 
-        Session::flash('flash_message', "Branch Admin with ID " . $user->id . " successfully added!");
-
         if($request->exists('setup')) {
-          return redirect('/setup/product-categories');
+          return response()->json(['name' => $request->get('name'), 'email' => $request->get('email')]);
         }
+
+        Session::flash('flash_message', "Branch Admin with ID " . $user->id . " successfully added!");
 
         return $this->showUsers($logged_in->company_id);
 

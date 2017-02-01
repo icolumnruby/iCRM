@@ -67,6 +67,10 @@ class ProductCategoryController extends Controller
             // save new product
             $productCat->save();
 
+            if($request->exists('setup')) {
+              return response()->json(['name' => $request->get('name'), 'description' => $request->get('description')]);
+            }
+
             Session::flash('flash_message', "Product Category with ID ". $productCat->id ." was successfully added!");
 
             return $this->index();

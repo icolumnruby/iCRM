@@ -8,6 +8,8 @@ use App\Http\Requests;
 use App\Models\Branch;
 use App\Models\Company;
 use App\Models\CompanyPassslot;
+use App\Models\ProductCategory;
+use App\Models\User;
 use Kodeine\Acl\Models\Eloquent\Permission;
 use Kodeine\Acl\Models\Eloquent\Role;
 use Auth;
@@ -49,7 +51,14 @@ class SetupController extends Controller
   public function setBranches(){
     $user = Auth::user();
 
-    return view('setup.set-branches', compact('user'));
+    $branches = Branch::with('company')
+        ->where([
+                ['branch.deleted_at', NULL],
+                ['branch.company_id', $user->company_id]
+            ])
+        ->get();
+
+    return view('setup.set-branches', compact('user', 'branches'));
   }
 
   public function setManagers(){
@@ -62,12 +71,52 @@ class SetupController extends Controller
             ])
         ->get();
 
-    return view('setup.set-managers', compact('user', 'branches', 'type'));
+    $managers = User::where([
+                ['company_id', $user->company_id],
+                ['branch_id', '!=', 0],
+            ])
+            ->get();
+
+    return view('setup.set-managers', compact('user', 'branches', 'type', 'managers'));
   }
 
   public function setProductCategories(){
     $user = Auth::user();
+    $categories = ProductCategory::where([
+//                    ['products.branch_id', $logged_in->company_id],
+            ])
+            ->get();
 
-    return view('setup.set-product-categories', compact('user'));
+    return view('setup.set-product-categories', compact('user', 'categories'));
+  }
+
+  public function confirmSetup(){
+    $user = Auth::user();
+    
+    $passTemplate = CompanyPassslot::where([
+                ['company_passslot.company_id', $user->company_id],
+                ['company_passslot.pass_type', 'pass.slot.storecard'],
+            ])
+            ->first();
+
+    $branches = Branch::with('company')
+        ->where([
+                ['branch.deleted_at', NULL],
+                ['branch.company_id', $user->company_id]
+            ])
+        ->get();
+
+    $managers = User::where([
+                ['company_id', $user->company_id],
+                ['branch_id', '!=', 0],
+            ])
+            ->get();
+
+    $categories = ProductCategory::where([
+//                    ['products.branch_id', $logged_in->company_id],
+            ])
+            ->get();
+
+    return view('setup.setup-confirm', compact('user', 'passTemplate', 'branches', 'managers', 'categories'));
   }
 }
