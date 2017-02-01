@@ -4,7 +4,7 @@
 <div class="row ">
   <p class="headline">Setup Branch Managers</p>
   <h4>Add a branch manager to your branch</h4>
-  <form method="POST" action="/branch/create-user" name="formPassTemplate" id="formPassTemplate" class="input-form">
+  <form method="POST" action="/branch/create-user" class="input-form">
     {!! csrf_field() !!}
     <input type="hidden" name="company_id" value="{!! $user->company_id !!}" />
     <input type="hidden" name="type" value="{!! $type !!}" />

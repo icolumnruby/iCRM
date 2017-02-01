@@ -2,19 +2,19 @@
 
 @section('content')
 <div class="row ">
-  <p class="headline">Setup Branches</p>
-  <h4>Add your branch name and location</h4>
-  <form method="POST" action="{!! route('branch.index') !!}" class="input-form">
+  <p class="headline">Setup Product Categories</p>
+  <h4>Add product categories</h4>
+  <form method="POST" action="/product/category" class="input-form">
     {!! csrf_field() !!}
-    <input type="hidden" name="company_id" value="{!! $user->company_id !!}" />
+    <input type="hidden" name="companyId" value="{!! $user->company_id !!}" />
     <input type="hidden" name="setup" value="yes" />
     <div class="input-field">
         <input type="text" name="name" id="name" required=""/>
-        <label for="name">Name</label>
+        <label for="name">Category Name</label>
     </div>
     <div class="input-field">
-        <textarea name="address" id="address" rows="2" class="materialize-textarea"></textarea>
-        <label for="address">Address</label>
+        <textarea name="description" id="description" rows="2" class="materialize-textarea"></textarea>
+        <label for="description">Description</label>
     </div>
     <div class="row">
       <div class="col s12">
@@ -33,6 +33,6 @@
       <button type="submit" class="btn brand-gradient">Next</button>
     </div>
   </form>
-  <p class="caption center-align">Next Step: Add Managers</p>
+  <p class="caption center-align">Next Step: End of Setup</p>
 </div>
 @stop
