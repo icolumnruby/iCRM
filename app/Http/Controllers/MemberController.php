@@ -7,6 +7,7 @@ use App\Models\Member;
 use App\Models\Branch;
 use App\Models\Country;
 use App\Models\Company;
+use App\Models\CompanyPassslot;
 use App\Models\Nationality;
 use App\Models\MemberPoints;
 use App\Models\MemberPointsTxn;
@@ -116,39 +117,81 @@ class MemberController extends Controller {
             'nric' => 'required|is_valid_nric|unique:members,nric,NULL,id,deleted_at,NULL' // check if unique
         ]);
 
+        $responseArr = [];
+
         if ($v && $v->fails()) {
             return redirect()->back()->withInput($request->all())->withErrors($v->errors());
         } else {
-            // create the data for new member
-            $member = new Member;
-            $member->salutation = $request->get('salutation');
-            $member->firstname = $request->get('firstname');
-            $member->middlename = $request->get('middlename');
-            $member->lastname = $request->get('lastname');
-            $member->gender = $request->get('gender');
-            $member->email = $request->get('email');
-            $member->nric = $request->get('nric');
-            $member->birthdate = $request->get('birthdate');
-            $member->mobile_country_code = $request->get('mobileCountryCode');
-            $member->mobile = $request->get('mobile');
-            $member->state = $request->get('state');
-            $member->city = $request->get('city');
-            $member->country_id = $request->get('countryId');
-            $member->postal_code = $request->get('postalCode');
-            $member->nationality_id = $request->get('nationalityId');
-            $member->company_id = $logged_in->company_id;
-            $member->member_type_id = $request->get('memberTypeId');
-            $member->email_subscribe = ($request->get('emailSubscribe') == 'Y') ? 'Y' : 'N';
-            $member->sms_subscribe = ($request->get('smsSubscribe') == 'Y') ? 'Y' : 'N';
 
-            $member->created_by = $logged_in->id;
-            $member->last_updated_by = $logged_in->id;
+            //create pass for member from company's template ID
+            $appKey = env('PASSSLOT_KEY');
+            $company = Company::findOrFail($logged_in->company_id);
+            // $passTemplateId = $company->passslot_template_id;
 
-            // save new member
-            $member->save();
+            $passTemplate = CompanyPassslot::where([
+                        ['company_passslot.company_id', $logged_in->company_id],
+                        ['company_passslot.pass_type', 'pass.slot.storecard'],
+                    ])
+                    ->first();
 
-            //get the member_id and save other data to member_detail table
-            $member_id = $member->id;
+            $passTemplateId = $passTemplate->passslot_id;
+
+            try {
+                $engine = PassSlotClass::start($appKey);
+                $data = array(
+                  "firstName"=>$request->get('firstname'),
+                  "lastName"=>$request->get('lastname'),
+                  "memberType"=>Member::$_memberType[$request->get('memberTypeId')],
+                  "memberPoints"=>0
+                );
+                $response = $engine->createPassFromTemplate($passTemplateId, $data);
+                $responseArr = json_decode($response, true);
+              } catch (PassSlotApiException $e) {
+                Session::flash('error_message', "Error creating pass. Please try again!");
+                return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
+              }
+
+              // Only create the member modal if pass has been created
+              if (isset($responseArr['serialNumber'])) {
+                // create the data for new member
+                $member = new Member;
+
+                $member->salutation = $request->get('salutation');
+                $member->firstname = $request->get('firstname');
+                $member->middlename = $request->get('middlename');
+                $member->lastname = $request->get('lastname');
+                $member->gender = $request->get('gender');
+                $member->email = $request->get('email');
+                $member->nric = $request->get('nric');
+                $member->birthdate = $request->get('birthdate');
+                $member->mobile_country_code = $request->get('mobileCountryCode');
+                $member->mobile = $request->get('mobile');
+                $member->state = $request->get('state');
+                $member->city = $request->get('city');
+                $member->country_id = $request->get('countryId');
+                $member->postal_code = $request->get('postalCode');
+                $member->nationality_id = $request->get('nationalityId');
+                $member->company_id = $logged_in->company_id;
+                $member->member_type_id = $request->get('memberTypeId');
+                $member->email_subscribe = ($request->get('emailSubscribe') == 'Y') ? 'Y' : 'N';
+                $member->sms_subscribe = ($request->get('smsSubscribe') == 'Y') ? 'Y' : 'N';
+
+                $member->created_by = $logged_in->id;
+                $member->last_updated_by = $logged_in->id;
+
+                $member->pass_serial_number = $responseArr['serialNumber'];
+                $member->pass_type_id = $responseArr['passTypeIdentifier'];
+                $member->pass_url = $responseArr['url'];
+
+                // save new member
+                $member->save();
+
+              } else {
+                  Session::flash('error_message', "Error saving pass. Please try again!");
+              }
+
+              //get the member_id and save other data to member_detail table
+              $member_id = $member->id;
 
             //check if there are equivalent points conversion for member with action = signup
             $loyaltyConfig = LoyaltyConfig::where([
@@ -192,40 +235,21 @@ class MemberController extends Controller {
                 $memberPointsTxn->last_updated_by = $logged_in->id;
 
                 $memberPointsTxn->save();
+
+                try {
+                    $engine = PassSlotClass::start($appKey);
+                    $pass = new \stdClass();
+                    $pass->passTypeIdentifier = $member->pass_type_id;
+                    $pass->serialNumber = $member->pass_serial_number;
+                    $placeholderName = "memberPoints";
+                    $value = $memberPoints->points_balance;
+                    $response = $engine->updatePassValue($pass, $placeholderName, $value);
+
+                  } catch (PassSlotApiException $e) {
+                    Session::flash('error_message', "Error updating pass. Please try again!");
+                    return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
+                  }
             }
-
-            //create pass for member from company's template ID
-            $appKey = env('PASSSLOT_KEY');
-            $company = Company::findOrFail($logged_in->company_id);
-            $passTemplateId = $company->passslot_template_id;
-
-            try {
-                $engine = PassSlotClass::start($appKey);
-                $data = array(
-                  "firstName"=>$request->get('firstname'),
-                  "lastName"=>$request->get('lastname'),
-                  "memberType"=>Member::$_memberType[$request->get('memberTypeId')],
-                  "memberPoints"=>MemberPoints::_getPoints($member_id)
-                );
-                $response = $engine->createPassFromTemplate($passTemplateId, $data);
-                $responseArr = json_decode($response, true);
-
-                if (isset($responseArr['serialNumber'])) {
-                    $member = Member::findOrFail($member_id);
-
-                    $member->pass_serial_number = $responseArr['serialNumber'];
-                    $member->pass_type_id = $responseArr['passTypeIdentifier'];
-                    $member->pass_url = $responseArr['url'];
-                    $member->save();
-
-                    Session::flash('flash_message', "PassSlot Pass was created successfully.");
-                } else {
-                    Session::flash('error_message', "Error saving pass. Please try again!");
-                }
-              } catch (PassSlotApiException $e) {
-                Session::flash('error_message', "Error creating pass. Please try again!");
-                return redirect()->back()->withInput($request->all())->withErrors([$e->getMessage()]);
-              }
 
             Session::flash('flash_message', "Member with ID $member_id was successfully added!");
 
