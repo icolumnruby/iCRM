@@ -34,6 +34,10 @@ class PermissionRoleTableSeeder extends Seeder
                 'permission_id' => 5,
                 'role_id' => 1
             ),
+            array(
+                'permission_id' => 6,
+                'role_id' => 1
+            ),
             //branch manager role
             array(
                 'permission_id' => 2,
@@ -51,6 +55,10 @@ class PermissionRoleTableSeeder extends Seeder
                 'permission_id' => 5,
                 'role_id' => 2
             ),
+            array(
+                'permission_id' => 6,
+                'role_id' => 2
+            ),
             //staff role
             array(
                 'permission_id' => 3,
@@ -62,6 +70,10 @@ class PermissionRoleTableSeeder extends Seeder
             ),
             array(
                 'permission_id' => 5,
+                'role_id' => 3
+            ),
+            array(
+                'permission_id' => 6,
                 'role_id' => 3
             )
 
