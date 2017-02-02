@@ -260,7 +260,6 @@ class CompanyController extends Controller
 
     public function savePassSlotImages(Request $request)
     {
-        // dd($request);
         $loggedIn = Auth::user();
         $v = $this->validate($request, [
             'passTemplateId' => 'required',
@@ -281,11 +280,9 @@ class CompanyController extends Controller
               $imageResolution = 'high';
               $image = $request->file('image');
 
-              // dd($image);
               $response = $engine->saveTemplateImage($templateId, $imageType, $imageResolution, $image);
               $responseArr = json_decode($response, true);
 
-              // dd($responseArr);
 
               if (isset($responseArr['urls'])) {
                   $passTemplate = CompanyPassslot::find($request->get('passTemplateId'));
@@ -310,5 +307,19 @@ class CompanyController extends Controller
           Session::flash('flash_message', "Pass template images uploaded successfully.");
 
         }
+    }
+
+    public function completeSetup(Request $request)
+    {
+      $loggedIn = Auth::user();
+
+      $brand = Company::find($loggedIn->company_id);
+
+      $brand->has_setup = $request->get('has_setup');
+      $brand->save();
+
+      session(['has_setup' => true]);
+
+      return redirect('/admin');
     }
 }

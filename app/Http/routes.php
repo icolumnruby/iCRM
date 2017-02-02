@@ -6,15 +6,19 @@ Route::group(
         Route::get('/company/create-pass', 'CompanyController@createPassSlotTemplate');
         Route::post('/company/save-pass-template', 'CompanyController@savePassSlotTemplate');
         Route::post('/company/save-pass-images', 'CompanyController@savePassSlotImages');
+        Route::post('/company/complete-setup', 'CompanyController@completeSetup');
         Route::resource('company', 'CompanyController');
 
         //setup routes
         Route::get('/setup', 'SetupController@index');
-        Route::get('/setup/program', 'SetupController@chooseProgram');
+        Route::get('/setup/program', 'SetupController@setProgram');
         Route::get('/setup/pass-template', 'SetupController@setTemplate');
         Route::get('/setup/pass-template/{templateId?}', 'SetupController@setTemplateImages');
+        Route::get('/setup/branch', 'SetupController@setBranches');
+        Route::get('/setup/managers', 'SetupController@setManagers');
+        Route::get('/setup/product-categories', 'SetupController@setProductCategories');
+        Route::get('/setup/confirm', 'SetupController@confirmSetup');
         // Route::post('/setup/program', 'SetupController@chooseProgram');
-        // Route::get('/setup/program', 'SetupController@setTemplate');
 
     }
 );

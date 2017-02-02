@@ -1,7 +1,7 @@
 @extends('layouts/admin')
 
 @section('content')
-<div class="row center-align">
+<div class="row">
   <p class="headline">Brand Your Membership</p>
   <h4>Upload your logo and Membership Pass image</h4>
   <div class="pass-template" style="background-color: '{!! $passTemplate->background_colour !!}'; color: '{!! $passTemplate->foreground_colour !!}'">
@@ -42,12 +42,12 @@
     </div>
   </div>
   <div class="row">
-    <div class="col s12">
-      <a href="{{url('setup')}}" class="btn brand-ghost">Back</a>
-      <a class="btn brand-gradient">Next</a>
+    <div class="col s12 center-align">
+      <a href="{{ URL::previous() }}" class="btn brand-ghost">Back</a>
+      <a href="{{url('setup/branch')}}" class="btn brand-gradient">Next</a>
     </div>
   </div>
-  <p class="caption">Next Step: Add Branches</p>
+  <p class="caption center-align">Next Step: Add Branches</p>
 </div>
 <script type="text/javascript">
 jQuery(function() {

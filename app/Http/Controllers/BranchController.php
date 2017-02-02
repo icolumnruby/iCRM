@@ -73,6 +73,7 @@ class BranchController extends Controller
     {
         $logged_in = Auth::user();
         //validate required fields
+
         $v = $this->validate($request, [
             'name' => 'required',
             'company_id' => 'required',
@@ -92,6 +93,10 @@ class BranchController extends Controller
 
             // save new branch
             $branch->save();
+
+            if($request->exists('setup')) {
+              return response()->json(['name' => $request->get('name'), 'address' => $request->get('address')]);
+            };
 
             Session::flash('flash_message', 'Branch successfully added!');
 
@@ -257,6 +262,10 @@ class BranchController extends Controller
             $userRole->save();
         }
 
+        if($request->exists('setup')) {
+          return response()->json(['name' => $request->get('name'), 'email' => $request->get('email')]);
+        }
+
         Session::flash('flash_message', "Branch Admin with ID " . $user->id . " successfully added!");
 
         return $this->showUsers($logged_in->company_id);
@@ -280,4 +289,3 @@ class BranchController extends Controller
     }
 
 }
-
