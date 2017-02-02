@@ -4,7 +4,7 @@
 <div class="row">
   <p class="headline">Brand Your Membership</p>
   <h4>Upload your logo and Membership Pass image</h4>
-  <div class="pass-template" style="background-color: {!! $passTemplate->background_colour !!}; color: {!! $passTemplate->foreground_colour !!}">
+  <div class="pass-template" style="background-color: '{!! $passTemplate->background_colour !!}'; color: '{!! $passTemplate->foreground_colour !!}'">
     <div class="pass-header-section">
       <form action="{!! url('company/save-pass-images') !!}" class="dropzone image-drop valign-wrapper" id="logo-input" enctype="multipart/form-data">
         {!! csrf_field() !!}

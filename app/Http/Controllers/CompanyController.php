@@ -88,7 +88,7 @@ class CompanyController extends Controller
             $brand->created_by = $logged_in->id;
             $brand->last_updated_by = $logged_in->id;
 
-            // save new brand
+            // save new company
             $brand->save();
 
             Session::flash('flash_message', 'Company successfully added!');
@@ -226,7 +226,6 @@ class CompanyController extends Controller
                         )
                     )
                 );
-
                 $response = $engine->createTemplate('POST', $data);
                 $responseArr = json_decode($response, true);
 

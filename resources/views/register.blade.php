@@ -26,7 +26,7 @@
                     <form class="form-horizontal" id="frmRegisterMerchant" role="form" method="POST" action="{!! url('/register') !!}">
                         {!! csrf_field() !!}
 
-                        <div class="form-group{!! $errors->has('name') ? ' has-error' : '' !!} required">
+                        <div class="form-group{!! $errors->has('name') ? ' has-error' : '' !!}">
                             <label class="col-md-4 control-label">Brand Name</label>
 
                             <div class="col-md-6">
@@ -52,7 +52,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group{!! $errors->has('fullname') ? ' has-error' : '' !!} required">
+                        <div class="form-group{!! $errors->has('fullname') ? ' has-error' : '' !!}">
                             <label class="col-md-4 control-label">Full Name</label>
 
                             <div class="col-md-6">
@@ -93,33 +93,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="form-group{!! $errors->has('address') ? ' has-error' : '' !!}">
-                            <label class="col-md-4 control-label">Address</label>
-
-                            <div class="col-md-6">
-                                <input type="text" class="form-control" name="address" value="{!! old('address') !!}">
-
-                                @if ($errors->has('address'))
-                                    <span class="help-block">
-                                        <strong>{!! $errors->first('address') !!}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="country" class="col-md-4 control-label">Country</label>
-                            <div class="col-md-6">
-                                <select class="form-control input-sm col-xs-4" id="country_id" name="country_id">
-                                    <option value="">Please Choose</option>
-                        @if (count($countries))
-                            @foreach ($countries as $val)
-                                    <option value="{!!$val->id!!}" {!! ($val->name == 'Singapore') ? 'selected="selected"' : '' !!}>{!!$val->name!!}</option>
-                            @endforeach
-                        @endif
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group{!! $errors->has('comments') ? ' has-error' : '' !!}">
+                        <div class="form-group{!! $errors->has('comments') ? ' has-error' : '' !!} required">
                             <label class="col-md-4 control-label">Comments</label>
 
                             <div class="col-md-6">
@@ -163,17 +137,10 @@ $(function() {
             invalid: 'glyphicon glyphicon-remove'
         },
         fields: {
-            brand: {
+            code: {
                 validators: {
                     notEmpty: {
-                        message: 'Brand is required'
-                    }
-                }
-            },
-            fullname: {
-                validators: {
-                    notEmpty: {
-                        message: 'Full Name is required'
+                        message: 'Company Code is required'
                     }
                 }
             },
@@ -188,6 +155,24 @@ $(function() {
                     regexp: {
                         regexp: '^[^@\\s]+@([^@\\s]+\\.)+[^@\\s]+$',
                         message: 'The value is not a valid email address'
+                    }
+                }
+            },
+            password: {
+                validators: {
+                    notEmpty: {
+                        message: 'The password is required and cannot be empty'
+                    }
+                }
+            },
+            confirm_password: {
+                validators: {
+                    notEmpty: {
+                        message: 'The confirm password is required and cannot be empty'
+                    },
+                    identical: {
+                        field: 'password',
+                        message: 'The password and its confirm must be the same'
                     }
                 }
             },
