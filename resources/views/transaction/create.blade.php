@@ -3,96 +3,64 @@
 @section('content')
 
 <h3 class="page-header">Add Transaction</h3>
-@if(Session::has('flash_message'))
-    <div class="alert alert-success">
-        {!! Session::get('flash_message') !!}
-    </div>
-@endif
-@if (count($errors) > 0)
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{!! $error !!}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 
 @if (count($member))
 <form method="POST" action="{!!route('transaction.index')!!}" name="frmTxn" class="form-horizontal" id="frmTxn">
     {!! csrf_field() !!}
-    <div class="form-group">
-        <label class="col-xs-2 control-label">Member ID</label>
-        <div class="col-xs-4">
+    <div class="row">
+      <div class="input-field col m4">
             <p class="form-control-static">{!! $member->id !!}</p>
             <input type="hidden" name="memberId" id="memberId" value="{!! $member->id !!}" />
-        </div>
+            <label for="memberId" class="active">Member ID</label>
+      </div>
+      <div class="input-field col m4">
+          <p class="form-control-static">{!! $totalPoints !!}</p>
+          <label class="active">Member Points</label>
+      </div>
+      <div class="input-field col m4">
+          <p class="form-control-static">{!! App\Models\Member::$_memberType[$member->member_type_id] !!}</p>
+          <label class="active">Member Type</label>
+      </div>
     </div>
-    <div class="form-group">
-        <label class="col-xs-2 control-label">Member Points</label>
-        <div class="col-xs-4">
-            <p class="form-control-static">{!! $totalPoints !!}</p>
-        </div>
+    <div class="input-field">
+      <select id="productCategoryId" name="productCategoryId">
+          <option value="" disabled selected>Please Choose</option>
+  @if (count($categories))
+      @foreach ($categories as $val)
+          <option value="{!! $val->id !!}">{!! $val->name !!}</option>
+      @endforeach
+  @endif
+      </select>
+      <label for="productCategoryId">Product Category</label>
     </div>
-    <div class="form-group">
-        <label class="col-xs-2 control-label">Member Type</label>
-        <div class="col-xs-4">
-            <p class="form-control-static">{!! App\Models\Member::$_memberType[$member->member_type_id] !!}</p>
-        </div>
+    <div class="input-field required">
+        <input type="text" name="amount" id="amount" placeholder="i.e. 800.75" />
+        <label for="amount">Amount</label>
     </div>
-    <div class="form-group">
-        <label class="col-xs-2 control-label">Product Category</label>
-        <div class="col-xs-4">
-            <select class="form-control input-sm col-xs-4" id="productCategoryId" name="productCategoryId">
-                <option value="">Please Choose</option>
-        @if (count($categories))
-            @foreach ($categories as $val)
-                <option value="{!! $val->id !!}">{!! $val->name !!}</option>
-            @endforeach
-        @endif
-            </select>
-        </div>
+    <div class="input-field">
+      <select id="paymentType" name="paymentType">
+          <option value="0" disabled selected>Choose One</option>
+      @foreach ($paymentType as $key => $val)
+          <option value="{!! $key !!}">{!! $val->name !!}</option>
+      @endforeach
+      </select>
+      <label for="paymentType">Payment Type</label>
     </div>
-    <div class="form-group required">
-        <label for="amount" class="control-label col-xs-2">Amount</label>
-        <div class="col-xs-4">
-            <input type="text" name="amount" id="amount" placeholder="i.e. 800.75" class="form-control input-sm" />
-        </div>
+    <div class="input-field">
+      <select id="status" name="status">
+          <option value="" disabled selected>Please Choose</option>
+      @foreach (App\Models\Transaction::$_status as $key => $status)
+          <option value="{!! $key !!}">{!! $status !!}</option>
+      @endforeach
+      </select>
+      <label for="status">Status</label>
     </div>
-    <div class="form-group">
-        <label for="paymentType" class="control-label col-xs-2">Payment Type</label>
-        <div class="col-xs-4">
-            <select class="form-control input-sm col-xs-4" id="paymentType" name="paymentType">
-                <option value="0">Choose One</option>
-            @foreach ($paymentType as $key => $val)
-                <option value="{!! $key !!}">{!! $val->name !!}</option>
-            @endforeach
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="status" class="control-label col-xs-2">Status</label>
-        <div class="col-xs-4">
-            <select class="form-control input-sm col-xs-4" id="status" name="status">
-                <option value="">Please Choose</option>
-            @foreach (App\Models\Transaction::$_status as $key => $status)
-                <option value="{!! $key !!}">{!! $status !!}</option>
-            @endforeach
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="remarks" class="control-label col-xs-2">Remarks</label>
-        <div class="col-xs-4">
-            <textarea type="text" rows="2" name="remarks" id="remarks" class="form-control input-sm"></textarea>
-        </div>
+    <div class="input-field">
+        <textarea type="text" rows="2" name="remarks" id="remarks" class="materialize-textarea"></textarea>
+        <label for="remarks">Remarks</label>
     </div>
 
-    <div class="form-group">
-        <div class="col-xs-offset-2 col-xs-10">
-            <button type="submit" class="btn btn-primary" name="addMember">Add Transaction</button>
-        </div>
-    </div>
+    <button type="submit" class="btn brand-gradient" name="addMember">Add Transaction</button>
 </form>
 
 @endif
@@ -100,33 +68,6 @@
 <script type="text/javascript">
 $(function() {
 
-    $('#frmTxn').formValidation({
-        framework: 'bootstrap',
-        icon: {
-            invalid: 'glyphicon glyphicon-remove',
-        },
-        fields: {
-            amount: {
-                validators: {
-                    notEmpty: {
-                        message: 'Amount is required'
-                    }
-                }
-            }
-        }
-    });
-    $('#paymentMode').change(function() {
-        var modeId = $(this).val();
-        $('#paymentType option').hide();
-        $("#paymentType option:selected").prop("selected", false);
-        $('#paymentType option:first').show().attr('selected','selected');
-
-        $('#paymentType option').each(function () {
-            if ($(this).data('modeid') == modeId) {
-                $(this).show();
-            }
-        });
-    });
 
 });
 </script>

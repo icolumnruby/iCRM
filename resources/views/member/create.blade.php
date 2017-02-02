@@ -195,7 +195,7 @@
         <div class="row">
           <div class="input-field col s12">
               <div class="col-xs-offset-2 col-xs-10">
-                  <button type="submit" class="btn btn-primary" name="addMember">Add Member</button>
+                  <button type="submit" class="btn brand-gradient" name="addMember">Add Member</button>
                   <a class="btn btn-link" href="{!!route('member.index')!!}">Cancel</a>
               </div>
           </div>

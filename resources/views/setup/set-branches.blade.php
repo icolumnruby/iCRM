@@ -35,20 +35,20 @@
     </form>
   </div>
   <div class="col s12 m6 table-wrapper" style="display:none">
-    @if (count($branches))
     <table class="table responsive-table highlight" id="branchList">
         <tr>
           <th>Branch</th>
           <th>Address</th>
         </tr>
+        @if (count($branches))
         @foreach ($branches as $branch)
         <tr>
           <td>{{ $branch->name }}</td>
           <td>{{ $branch->address }}</td>
         </tr>
         @endforeach
+        @endif
       </table>
-      @endif
   </div>
 </div>
 <div class="row">

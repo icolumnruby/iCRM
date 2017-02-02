@@ -7,22 +7,6 @@
         <div class="col-lg-12">
 <h3 class="page-header">Update Company Detail</h3>
 
-@if(Session::has('flash_message'))
-<div class="alert alert-success">
-    {!! Session::get('flash_message') !!}
-</div>
-@endif
-
-@if (count($errors) > 0)
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{!! $error !!}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-
 @if (count($brand))
     {!! Form::model($brand,['method' => 'PATCH','route'=>['company.update',$brand->id], 'class'=>'form-horizontal', 'id'=>'frmBrand']) !!}
     {!! csrf_field() !!}
@@ -118,35 +102,6 @@
 </div>
 <script type="text/javascript">
 $(function () {
-    $("[name='isActivated']").bootstrapSwitch();
-    $('#frmBrand').formValidation({
-        framework: 'bootstrap',
-        icon: {
-            invalid: 'glyphicon glyphicon-remove',
-        },
-        fields: {
-            name: {
-                validators: {
-                    notEmpty: {
-                        message: 'Name is required'
-                    }
-                }
-            }
-        }
-    });
-
-    var modeId = $('#paymentMode').val();
-
-    $('#paymentType option').hide();
-    $("#paymentType option:selected").prop("selected", false);
-    $('#paymentType option:first').show().attr('selected', 'selected');
-
-    $('#paymentType option').each(function () {
-        if ($(this).data('modeid') == modeId) {
-            $(this).show();
-            $(this).attr('selected', 'selected');
-        }
-    });
 
 });
 </script>

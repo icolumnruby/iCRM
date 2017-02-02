@@ -15,6 +15,7 @@
         <link href="{{ URL::asset('css/bootstrap-switch.min.css') }}" rel="stylesheet">
         <link href="{{ URL::asset('css/bootstrap-social.css') }}" rel="stylesheet">
         <link href="{{ URL::asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
+        <link href="{{ URL::asset('css/flatpickr.min.css') }}" rel="stylesheet">
 
         <link rel="stylesheet" href="{{ URL::asset('css/formValidation.min.css') }}">
 
@@ -74,11 +75,12 @@
         <script src="{{ URL::asset('js/materialize.min.js') }}"></script>
         <script src="{{ URL::asset('js/materialize-colorpicker.min.js') }}"></script>
         <script src="{{ URL::asset('js/dropzone.js') }}"></script>
+        <script type="text/javascript" src="{{ URL::asset('js/bootstrap-datetimepicker.min.js') }}"></script>
 
         <!-- Bootstrap Core JavaScript -->
         <script type="text/javascript" src="{{ URL::asset('js/bootstrap-switch.min.js') }}"></script>
 
-        <script type="text/javascript" src="{{ URL::asset('js/bootstrap-datetimepicker.min.js') }}"></script>
+        <script type="text/javascript" src="{{ URL::asset('js/flatpickr.min.js') }}"></script>
 
         <!-- Custom Theme JavaScript -->
         <script src="{{ URL::asset('js/main.js') }}"></script>

@@ -55,20 +55,20 @@
     </form>
   </div>
   <div class="col s12 m6 table-wrapper" style="display:none">
-    @if (count($managers))
     <table class="table responsive-table highlight" id="managerList">
         <tr>
           <th>Name</th>
           <th>Email</th>
         </tr>
+        @if (count($managers))
         @foreach ($managers as $manager)
         <tr>
           <td>{{ $manager->name }}</td>
           <td>{{ $manager->email }}</td>
         </tr>
         @endforeach
+        @endif
       </table>
-      @endif
   </div>
 </div>
 

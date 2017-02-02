@@ -15,7 +15,7 @@
     {!! Form::close() !!}
   </div>
   <div class="col m12">
-    <a href="{{route('member.create')}}" class="btn btn-success btn-sm"><i class="material-icons left">add</i>Add New Member</a>
+    <a href="{{route('member.create')}}" class="btn brand-gradient"><i class="material-icons left">add</i>Add New Member</a>
   </div>
 </div>
 <div class="row">
@@ -55,10 +55,10 @@
                 {!! Form::close() !!}
             </td>
             <td>
-                <a href="{{url('transaction/create', $member->id)}}" class="btn btn-primary btn-xs">Add Txn</a>
+                <a href="{{url('transaction/create', $member->id)}}" class="btn brand-gradient btn-xs">Add Txn</a>
             </td>
-            <td><a href="{{url('member/add-points',$member->id)}}" class="btn btn-primary btn-xs">Update Points</a></td>
-            <td><a href="{{url('rewards/items',$member->id)}}" class="btn btn-primary btn-xs">Rewards</a></td>
+            <td><a href="{{url('member/add-points',$member->id)}}" class="btn brand-gradient btn-xs">Update Points</a></td>
+            <td><a href="{{url('rewards/items',$member->id)}}" class="btn brand-gradient btn-xs">Rewards</a></td>
         </tr>
      @endforeach
      </table>

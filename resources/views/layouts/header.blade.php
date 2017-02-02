@@ -13,8 +13,8 @@
         <div class="collapsible-body">
           <ul>
               @role('administrator')
-              <li><a href="/branch/create">Create</a></li>
-              <li><a href="/branch">View</a></li>
+              <li><a href="/branch/create">Add a Branch</a></li>
+              <li><a href="/branch">View Branches</a></li>
               @endrole
               <li><a href="/branch/show-users/{{ Auth::user()->company_id }}">View Users</a></li>
               <li><a href="/branch/add-manager">Add Manager</a></li>
