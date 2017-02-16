@@ -467,16 +467,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.5.10",
+            "version": "v2.5.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "fc376f7a61498e18520cd6fa083752a4ca08072b"
+                "reference": "7b9e911f9d8b30d43b96853dab26898c710d8f44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/fc376f7a61498e18520cd6fa083752a4ca08072b",
-                "reference": "fc376f7a61498e18520cd6fa083752a4ca08072b",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/7b9e911f9d8b30d43b96853dab26898c710d8f44",
+                "reference": "7b9e911f9d8b30d43b96853dab26898c710d8f44",
                 "shasum": ""
             },
             "require": {
@@ -534,7 +534,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-01-23 23:17:10"
+            "time": "2017-02-08 12:53:47"
         },
         {
             "name": "doctrine/inflector",
@@ -1352,16 +1352,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.34",
+            "version": "1.0.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "469ad53c13ea19a0e54e3e5d70f61227ddcc0299"
+                "reference": "dda7f3ab94158a002d9846a97dc18ebfb7acc062"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/469ad53c13ea19a0e54e3e5d70f61227ddcc0299",
-                "reference": "469ad53c13ea19a0e54e3e5d70f61227ddcc0299",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/dda7f3ab94158a002d9846a97dc18ebfb7acc062",
+                "reference": "dda7f3ab94158a002d9846a97dc18ebfb7acc062",
                 "shasum": ""
             },
             "require": {
@@ -1431,7 +1431,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2017-01-30 17:41:17"
+            "time": "2017-02-09 11:33:58"
         },
         {
             "name": "maatwebsite/excel",
@@ -2145,16 +2145,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.5",
+            "version": "v5.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "cd142238a339459b10da3d8234220963f392540c"
+                "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/cd142238a339459b10da3d8234220963f392540c",
-                "reference": "cd142238a339459b10da3d8234220963f392540c",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
+                "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
                 "shasum": ""
             },
             "require": {
@@ -2195,7 +2195,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2016-12-29 10:02:40"
+            "time": "2017-02-13 07:52:53"
         },
         {
             "name": "symfony/console",
@@ -2369,7 +2369,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v3.2.2",
+            "version": "v3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -3277,16 +3277,16 @@
         },
         {
             "name": "mockery/mockery",
-            "version": "0.9.7",
+            "version": "0.9.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "4de7969f4664da3cef1ccd83866c9f59378c3371"
+                "reference": "1e5e2ffdc4d71d7358ed58a6fdd30a4a0c506855"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/4de7969f4664da3cef1ccd83866c9f59378c3371",
-                "reference": "4de7969f4664da3cef1ccd83866c9f59378c3371",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/1e5e2ffdc4d71d7358ed58a6fdd30a4a0c506855",
+                "reference": "1e5e2ffdc4d71d7358ed58a6fdd30a4a0c506855",
                 "shasum": ""
             },
             "require": {
@@ -3338,7 +3338,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2016-12-19 14:50:55"
+            "time": "2017-02-09 13:29:38"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -3794,16 +3794,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.34",
+            "version": "4.8.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "7eb45205d27edd94bd2b3614085ea158bd1e2bca"
+                "reference": "791b1a67c25af50e230f841ee7a9c6eba507dc87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7eb45205d27edd94bd2b3614085ea158bd1e2bca",
-                "reference": "7eb45205d27edd94bd2b3614085ea158bd1e2bca",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/791b1a67c25af50e230f841ee7a9c6eba507dc87",
+                "reference": "791b1a67c25af50e230f841ee7a9c6eba507dc87",
                 "shasum": ""
             },
             "require": {
@@ -3862,7 +3862,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-01-26 16:15:36"
+            "time": "2017-02-06 05:18:07"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -4350,16 +4350,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.2.2",
+            "version": "v3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "50eadbd7926e31842893c957eca362b21592a97d"
+                "reference": "e1718c6bf57e1efbb8793ada951584b2ab27775b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/50eadbd7926e31842893c957eca362b21592a97d",
-                "reference": "50eadbd7926e31842893c957eca362b21592a97d",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/e1718c6bf57e1efbb8793ada951584b2ab27775b",
+                "reference": "e1718c6bf57e1efbb8793ada951584b2ab27775b",
                 "shasum": ""
             },
             "require": {
@@ -4401,7 +4401,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-01-03 13:51:32"
+            "time": "2017-01-21 17:06:35"
         },
         {
             "name": "webmozart/assert",
