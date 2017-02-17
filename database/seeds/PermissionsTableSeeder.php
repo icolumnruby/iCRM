@@ -42,6 +42,16 @@ class PermissionsTableSeeder extends Seeder
                 'name'        => 'transaction',
                 'slug'        => '{"create":true,"view":true,"update":true,"delete":true}',
                 'description' => 'manage transactions'
+            ),
+            array(
+                'name'        => 'loyalty',
+                'slug'        => '{"create":true,"view":true,"update":true,"delete":true}',
+                'description' => 'manage loyalty points program'
+            ),
+            array(
+                'name'        => 'rewards',
+                'slug'        => '{"create":true,"view":true,"update":true,"delete":true}',
+                'description' => 'manage rewards'
             )
         ));
     }
