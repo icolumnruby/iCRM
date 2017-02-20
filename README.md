@@ -1,7 +1,7 @@
 # iCRM
 
 Requirements:<br />
-MySQL/Postgres <br />
+MySQL <br />
 PHP >= 5.5.9<br />
 Laravel 5.2, requirements at https://laravel.com/docs/5.2/installation<br />
 Nginx<br />
