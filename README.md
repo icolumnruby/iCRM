@@ -23,5 +23,5 @@ php artisan migrate<br />
 php artisan db:seed<br />
 php artisan serve
 
-and then open the browser to view the website.
+Open the browser to view the website.
 
